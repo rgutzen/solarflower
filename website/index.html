@@ -1,0 +1,266 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solarflower — Understand, Simulate &amp; Optimize Solar Panel Yield</title>
+  <meta name="description" content="Open-source tools to understand, simulate, and optimize solar panel yield — from first principles to professional-grade calculations.">
+  <meta name="author" content="Robin Gutzen">
+  <meta name="theme-color" content="#F5A623">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Solarflower — Solar Panel Yield Toolkit">
+  <meta property="og:description" content="Understand, simulate, and optimize solar panel yield from first principles.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/rgutzen/solarflower-app">
+
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ================================================================== -->
+  <!-- NAVIGATION                                                         -->
+  <!-- ================================================================== -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner container">
+      <a href="#" class="nav__brand" aria-label="Solarflower home">
+        <img src="assets/logo.svg" alt="" width="36" height="36" class="nav__logo">
+        <span class="nav__wordmark">Solarflower</span>
+      </a>
+      <ul class="nav__links" role="list">
+        <li><a href="#components">Components</a></li>
+        <li><a href="#open-source">Open Source</a></li>
+        <li><a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="nav__github" aria-label="View on GitHub">
+          <!-- Inline GitHub icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================================================================== -->
+  <!-- HERO                                                               -->
+  <!-- ================================================================== -->
+  <header class="hero" id="hero">
+    <!-- Organic background shapes -->
+    <div class="hero__organic" aria-hidden="true">
+      <svg class="hero__blob hero__blob--1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M44.7,-76.4C58.8,-69.2,71.8,-58.1,79.6,-44.2C87.4,-30.3,90,-13.6,88.2,2.4C86.4,18.4,80.2,33.6,70.3,45.7C60.4,57.8,46.8,66.7,32.4,73.5C18,80.3,2.8,85,-12.6,83.9C-28,82.8,-43.6,75.9,-56.2,65.3C-68.8,54.7,-78.4,40.4,-83.4,24.5C-88.4,8.6,-88.8,-8.9,-83.5,-24.1C-78.2,-39.3,-67.2,-52.2,-53.7,-59.7C-40.2,-67.2,-24.2,-69.3,-8.4,-73.2C7.4,-77.1,14.8,-82.8,27.4,-82.3C40,-81.8,57.8,-75,44.7,-76.4Z" transform="translate(100 100)" fill="url(#blobGrad1)"/>
+        <defs><linearGradient id="blobGrad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5A623" stop-opacity="0.06"/><stop offset="100%" stop-color="#66BB6A" stop-opacity="0.04"/></linearGradient></defs>
+      </svg>
+      <svg class="hero__blob hero__blob--2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M39.9,-65.7C53.4,-60.5,67.1,-52.6,74.2,-40.8C81.3,-29,81.8,-13.3,79.3,1.5C76.8,16.3,71.3,30.1,62.5,41.2C53.7,52.3,41.6,60.7,28.4,66.3C15.2,71.9,0.9,74.7,-13.4,73.3C-27.7,71.9,-42,66.3,-53.2,57C-64.4,47.7,-72.5,34.7,-77,20.2C-81.5,5.7,-82.4,-10.3,-77.4,-24C-72.4,-37.7,-61.5,-49.1,-48.5,-54.6C-35.5,-60.1,-20.5,-59.7,-6.4,-62.2C7.7,-64.7,15.4,-70,26.4,-70.9C37.4,-71.8,51.6,-68.3,39.9,-65.7Z" transform="translate(100 100)" fill="url(#blobGrad2)"/>
+        <defs><linearGradient id="blobGrad2" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2D7DD2" stop-opacity="0.05"/><stop offset="100%" stop-color="#66BB6A" stop-opacity="0.03"/></linearGradient></defs>
+      </svg>
+    </div>
+
+    <div class="hero__inner container">
+      <div class="hero__text">
+        <h1 class="hero__title">
+          <span class="hero__title-accent">Understand</span>, and Optimize Your Solar&nbsp;Panel&nbsp;Yield
+        </h1>
+        <div class="hero__actions">
+          <a href="#components" class="btn btn--primary">Explore Components</a>
+          <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="btn btn--outline">View on GitHub</a>
+        </div>
+        <p class="hero__philosophy">
+          Solar energy is more than clean electricity — it is a path toward independence.
+          Every rooftop panel shifts power from centralized infrastructure back to individuals
+          and communities. Solarflower exists to put the knowledge, tools, and confidence
+          for that transition into everyone's hands — openly, transparently, and for&nbsp;free.
+        </p>
+      </div>
+      <div class="hero__illustration" aria-hidden="true">
+        <video autoplay muted playsinline>
+          <source src="assets/solarflower-animation.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Organic wave divider -->
+    <div class="hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,80 C240,110 480,40 720,70 C960,100 1200,30 1440,60 L1440,120 L0,120 Z" fill="#ffffff"/>
+        <path d="M0,90 C300,60 600,100 900,70 C1100,50 1300,90 1440,75 L1440,120 L0,120 Z" fill="#ffffff" opacity="0.5"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- MAIN CONTENT                                                       -->
+  <!-- ================================================================== -->
+  <main>
+
+    <!-- ---- Components Section ---- -->
+    <section class="components" id="components">
+      <!-- Organic accent -->
+      <div class="organic-accent organic-accent--left" aria-hidden="true">
+        <svg viewBox="0 0 120 300" width="120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M60,300 Q50,240 55,200 Q40,180 20,160 Q40,150 55,155 Q50,120 60,80 Q45,60 25,50 Q50,45 60,55 Q65,20 60,0" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.15"/>
+          <ellipse cx="20" cy="160" rx="18" ry="10" fill="#66BB6A" opacity="0.06" transform="rotate(-30 20 160)"/>
+          <ellipse cx="25" cy="50" rx="16" ry="9" fill="#66BB6A" opacity="0.05" transform="rotate(-20 25 50)"/>
+          <ellipse cx="75" cy="110" rx="15" ry="8" fill="#66BB6A" opacity="0.05" transform="rotate(25 75 110)"/>
+        </svg>
+      </div>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">The Toolkit</h2>
+          <p class="section-lead">Four interconnected tools spanning education, professional simulation, and on-site guidance.</p>
+        </div>
+
+        <div class="cards">
+
+          <!-- Card 1: Notebook -->
+          <article class="card card--notebook" data-reveal>
+            <div class="card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="4" width="28" height="40" rx="3" stroke="#F5A623" stroke-width="2.5" fill="#FFF8E7"/>
+                <line x1="14" y1="14" x2="30" y2="14" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="20" x2="28" y2="20" stroke="#E8920E" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <line x1="14" y1="26" x2="26" y2="26" stroke="#E8920E" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+                <circle cx="36" cy="36" r="10" fill="#F5A623" opacity="0.15"/>
+                <text x="32" y="40" font-size="14" font-weight="bold" fill="#F5A623" font-family="system-ui">∑</text>
+              </svg>
+            </div>
+            <div class="card__badge">Educational</div>
+            <h3 class="card__title">Solar Panel Power</h3>
+            <p class="card__audience">For curious learners, students &amp; educators</p>
+            <p class="card__desc">A step-by-step computational article deriving solar panel yield from first principles — solar geometry, atmospheric physics, panel temperature, and electrical modelling.</p>
+            <a href="article.html" class="card__cta btn btn--primary btn--sm">
+              Read the Article
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </article>
+
+          <!-- Card 2: Web App -->
+          <article class="card card--app" data-reveal>
+            <div class="card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="8" width="36" height="28" rx="3" stroke="#2D7DD2" stroke-width="2.5" fill="#E8F1FB"/>
+                <line x1="6" y1="14" x2="42" y2="14" stroke="#2D7DD2" stroke-width="1.5" opacity="0.4"/>
+                <circle cx="10" cy="11" r="1.2" fill="#F5A623"/>
+                <circle cx="14" cy="11" r="1.2" fill="#66BB6A"/>
+                <circle cx="18" cy="11" r="1.2" fill="#2D7DD2"/>
+                <rect x="10" y="18" width="14" height="3" rx="1" fill="#2D7DD2" opacity="0.25"/>
+                <rect x="10" y="23" width="10" height="3" rx="1" fill="#F5A623" opacity="0.35"/>
+                <rect x="10" y="28" width="12" height="3" rx="1" fill="#2D7DD2" opacity="0.15"/>
+                <polyline points="28,30 32,24 36,27 40,18" stroke="#F5A623" stroke-width="2" stroke-linecap="round" fill="none"/>
+              </svg>
+            </div>
+            <div class="card__badge card__badge--blue">Professional</div>
+            <h3 class="card__title">Solar Advisor</h3>
+            <p class="card__audience">For homeowners, installers &amp; energy consultants</p>
+            <p class="card__desc">Professional-grade yield simulation for any location worldwide. Real PVGIS climate data, PVsyst-equivalent physics, and an interactive orientation optimizer.</p>
+            <ul class="card__features" role="list">
+              <li>PVGIS TMY data</li>
+              <li>PVsyst-equivalent physics</li>
+              <li>15,000+ module database</li>
+            </ul>
+            <a href="solar-advisor.html" class="card__cta btn btn--blue btn--sm">
+              Open the App
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </article>
+
+          <!-- Card 3: Mobile App -->
+          <article class="card card--mobile" data-reveal>
+            <div class="card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="14" y="4" width="20" height="40" rx="4" stroke="#78909C" stroke-width="2.5" fill="#F5F5F5"/>
+                <line x1="14" y1="12" x2="34" y2="12" stroke="#78909C" stroke-width="1" opacity="0.3"/>
+                <line x1="14" y1="36" x2="34" y2="36" stroke="#78909C" stroke-width="1" opacity="0.3"/>
+                <circle cx="24" cy="40" r="1.5" fill="#78909C" opacity="0.5"/>
+                <!-- Compass needle -->
+                <circle cx="24" cy="24" r="8" stroke="#F5A623" stroke-width="1.5" fill="none" opacity="0.5"/>
+                <polygon points="24,17 22,25 24,23 26,25" fill="#E63946" opacity="0.7"/>
+                <polygon points="24,31 22,25 24,23 26,25" fill="#78909C" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="card__badge card__badge--grey">Coming Soon</div>
+            <h3 class="card__title">Panel Compass</h3>
+            <p class="card__audience">For installers &amp; DIY homeowners</p>
+            <p class="card__desc">Point your phone at the roof and get real-time tilt and compass guidance to align your solar panel to the optimal orientation for&nbsp;your&nbsp;location.</p>
+            <span class="card__cta card__cta--disabled btn btn--ghost btn--sm" aria-disabled="true">
+              Coming Soon
+            </span>
+          </article>
+
+        </div><!-- /.cards -->
+      </div>
+    </section>
+
+    <!-- ---- Open Source Section ---- -->
+    <section class="open-source" id="open-source">
+      <div class="container">
+        <div class="oss__inner">
+          <div class="oss__text">
+            <h2 class="section-title">Open Source</h2>
+            <p class="oss__lead">
+              Solarflower is released under the <strong>AGPL-3.0</strong> license.
+              The entire codebase — physics engine, web app, educational notebook, and this website — is open for inspection, contribution, and reuse.
+            </p>
+            <p class="oss__secondary">
+              Contributions, ideas, and bug reports are welcome. Commercial licensing is available for proprietary use.
+            </p>
+            <div class="oss__actions">
+              <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="btn btn--dark">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                View on GitHub
+              </a>
+              <a href="mailto:robin.gutzen@outlook.com?subject=Solarflower%20Commercial%20License" class="btn btn--outline btn--outline-dark">Contact for Licensing</a>
+            </div>
+          </div>
+          <div class="oss__graphic" aria-hidden="true">
+            <svg viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="100" r="90" fill="none" stroke="#F5A623" stroke-width="1.5" opacity="0.2"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#2D7DD2" stroke-width="1" opacity="0.15"/>
+              <circle cx="100" cy="100" r="50" fill="none" stroke="#F5A623" stroke-width="0.8" opacity="0.1"/>
+              <!-- Branch metaphor -->
+              <line x1="100" y1="100" x2="100" y2="30" stroke="#2D7DD2" stroke-width="2" opacity="0.4"/>
+              <line x1="100" y1="100" x2="160" y2="60" stroke="#F5A623" stroke-width="2" opacity="0.4"/>
+              <line x1="100" y1="100" x2="160" y2="140" stroke="#2D7DD2" stroke-width="2" opacity="0.4"/>
+              <line x1="100" y1="100" x2="40" y2="140" stroke="#F5A623" stroke-width="2" opacity="0.4"/>
+              <line x1="100" y1="100" x2="40" y2="60" stroke="#2D7DD2" stroke-width="2" opacity="0.4"/>
+              <circle cx="100" cy="30" r="8" fill="#F5A623" opacity="0.3"/>
+              <circle cx="160" cy="60" r="8" fill="#2D7DD2" opacity="0.3"/>
+              <circle cx="160" cy="140" r="8" fill="#F5A623" opacity="0.3"/>
+              <circle cx="40" cy="140" r="8" fill="#2D7DD2" opacity="0.3"/>
+              <circle cx="40" cy="60" r="8" fill="#F5A623" opacity="0.3"/>
+              <circle cx="100" cy="100" r="12" fill="#F5A623" opacity="0.2"/>
+              <!-- AGPL text -->
+              <text x="100" y="105" text-anchor="middle" font-size="11" fill="#1a1a2e" font-family="system-ui" font-weight="600" opacity="0.6">AGPL</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                             -->
+  <!-- ================================================================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
+        <span>Solarflower</span>
+      </div>
+      <p class="footer__copy">&copy; 2025 Robin Gutzen &middot; <a href="https://github.com/rgutzen/solarflower-app/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0-or-later</a></p>
+      <div class="footer__links">
+        <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="mailto:robin.gutzen@outlook.com" aria-label="Email Robin Gutzen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+</body>
+</html>

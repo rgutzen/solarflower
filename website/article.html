@@ -1,0 +1,608 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Sunlight to Watts — A First-Principles Guide | Solarflower</title>
+  <meta name="description" content="Trace the journey from nuclear fusion in the Sun's core to kilowatt-hours on your electricity meter. An interactive, equation-rich guide to solar panel physics.">
+  <meta name="author" content="Robin Gutzen">
+  <meta name="theme-color" content="#F5A623">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="From Sunlight to Watts — Solarflower">
+  <meta property="og:description" content="A first-principles derivation of solar panel power output, with interactive visualizations.">
+  <meta property="og:type" content="article">
+
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+
+  <!-- KaTeX for equation rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+        crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+          crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          crossorigin="anonymous"
+          onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,trust:true});"></script>
+
+  <!-- Plotly.js for interactive charts -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="article.css">
+</head>
+<body class="article-page">
+
+  <!-- ================================================================== -->
+  <!-- NAVIGATION                                                         -->
+  <!-- ================================================================== -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__brand" aria-label="Solarflower home">
+        <img src="assets/logo.svg" alt="" width="36" height="36" class="nav__logo">
+        <span class="nav__wordmark">Solarflower</span>
+      </a>
+      <ul class="nav__links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#components">Components</a></li>
+        <li><a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="nav__github" aria-label="View on GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================================================================== -->
+  <!-- ARTICLE HERO                                                       -->
+  <!-- ================================================================== -->
+  <header class="article-hero">
+    <div class="article-hero__organic" aria-hidden="true">
+      <svg class="hero__blob hero__blob--1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M44.7,-76.4C58.8,-69.2,71.8,-58.1,79.6,-44.2C87.4,-30.3,90,-13.6,88.2,2.4C86.4,18.4,80.2,33.6,70.3,45.7C60.4,57.8,46.8,66.7,32.4,73.5C18,80.3,2.8,85,-12.6,83.9C-28,82.8,-43.6,75.9,-56.2,65.3C-68.8,54.7,-78.4,40.4,-83.4,24.5C-88.4,8.6,-88.8,-8.9,-83.5,-24.1C-78.2,-39.3,-67.2,-52.2,-53.7,-59.7C-40.2,-67.2,-24.2,-69.3,-8.4,-73.2C7.4,-77.1,14.8,-82.8,27.4,-82.3C40,-81.8,57.8,-75,44.7,-76.4Z" transform="translate(100 100)" fill="url(#blobGradA1)"/>
+        <defs><linearGradient id="blobGradA1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5A623" stop-opacity="0.06"/><stop offset="100%" stop-color="#66BB6A" stop-opacity="0.04"/></linearGradient></defs>
+      </svg>
+    </div>
+    <div class="container">
+      <p class="article-hero__breadcrumb"><a href="index.html">Solarflower</a> <span aria-hidden="true">/</span> Article</p>
+      <h1 class="article-hero__title">From Sunlight to&nbsp;Watts</h1>
+      <p class="article-hero__subtitle">A First-Principles Derivation of Solar Panel Power Output</p>
+      <p class="article-hero__lead">Every hour, 430 quintillion joules of solar energy reach Earth's surface — enough to power human civilisation for an entire year. But how much of that bounty can a single rooftop panel actually capture? And how does the answer shift with latitude, tilt angle, and season? Starting from nuclear fusion in the Sun's core, we trace every energy transformation — across 150 million kilometres of space, through the atmosphere, and down to the kilowatt-hours on your electricity meter.</p>
+    </div>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- TABLE OF CONTENTS                                                  -->
+  <!-- ================================================================== -->
+  <aside class="toc-sidebar" aria-label="Table of contents">
+    <nav class="toc">
+      <p class="toc__label">Contents</p>
+      <ol class="toc__list" role="list">
+        <li><a href="#step-1" class="toc__link">The Sun as a Power Source</a></li>
+        <li><a href="#step-2" class="toc__link">Earth's Elliptical Orbit</a></li>
+        <li><a href="#step-3" class="toc__link">Axial Tilt &amp; Seasons</a></li>
+        <li><a href="#step-4" class="toc__link">The Sun's Path Across Your Sky</a></li>
+        <li><a href="#step-5" class="toc__link">The Atmosphere as a Filter</a></li>
+        <li><a href="#step-6" class="toc__link">Irradiance on a Tilted Panel</a></li>
+        <li><a href="#step-7" class="toc__link">From Irradiance to Electricity</a></li>
+        <li><a href="#step-8" class="toc__link">Annual Energy Yield</a></li>
+        <li><a href="#step-9" class="toc__link toc__link--interactive">Interactive Explorer</a></li>
+        <li><a href="#summary" class="toc__link">Summary</a></li>
+      </ol>
+    </nav>
+  </aside>
+
+  <!-- ================================================================== -->
+  <!-- ARTICLE BODY                                                       -->
+  <!-- ================================================================== -->
+  <main class="article" id="article">
+    <div class="article__container container">
+
+      <!-- Progress bar -->
+      <div class="article__progress" aria-hidden="true">
+        <div class="article__progress-bar" id="progress-bar"></div>
+      </div>
+
+      <!-- ==== INTRO: What we track ==== -->
+      <section class="article__section" data-reveal>
+        <h2 class="article__section-label">What we need to track</h2>
+        <p>Eight quantities form the links of our chain. Each one enters the story at a specific moment — we introduce them here so you can see the full map before we start walking.</p>
+        <div class="article__table-wrap">
+          <table class="article__table">
+            <thead>
+              <tr><th>Quantity</th><th>Symbol</th><th>Role</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Solar luminosity</td><td>$L_\odot$</td><td>Total power radiated by the Sun</td></tr>
+              <tr><td>Earth–Sun distance</td><td>$d$</td><td>Sets the irradiance arriving at Earth</td></tr>
+              <tr><td>Solar declination</td><td>$\delta$</td><td>The Sun's latitude on any given day</td></tr>
+              <tr><td>Solar altitude &amp; azimuth</td><td>$\alpha, A_z$</td><td>Where in your sky the Sun is right now</td></tr>
+              <tr><td>Air mass</td><td>$\text{AM}$</td><td>How much atmosphere the sunlight traverses</td></tr>
+              <tr><td>Panel tilt &amp; azimuth</td><td>$\beta, \gamma$</td><td><strong>The main variable: panel orientation</strong></td></tr>
+              <tr><td>Angle of incidence</td><td>$\theta$</td><td>The decisive geometric factor for power</td></tr>
+              <tr><td>Panel area &amp; efficiency</td><td>$A, \eta$</td><td>The hardware parameters</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Let's build the calculation layer by layer — each step adds exactly one physical idea and one new equation.</p>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 1 — Solar Constant                                          -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-1" data-reveal>
+        <div class="article__step-badge">Step 1</div>
+        <h2>The Sun as a Power Source</h2>
+        <h3>From nuclear fusion to the Solar Constant</h3>
+
+        <p>Everything begins in the Sun's core, where the <strong>proton–proton chain</strong> fuses hydrogen nuclei into helium. A tiny fraction of the input mass — about 0.7% — is converted into energy via Einstein's $E = \Delta m\,c^2$. That seemingly small fraction means roughly <em>four million tonnes of matter</em> vanish every second, reborn as light and heat.</p>
+
+        <p>The result is the Sun's <strong>luminosity</strong> — the total power it radiates in all directions:</p>
+
+        <div class="article__equation">
+          $$L_\odot = 3.828 \times 10^{26} \text{ W}$$
+        </div>
+
+        <p>This staggering number floods outward uniformly across all directions. At any distance $d$, that power is spread over the surface of an ever-growing sphere:</p>
+
+        <div class="article__equation">
+          $$I(d) = \frac{L_\odot}{4\pi d^2}$$
+        </div>
+
+        <p>This is the <strong>inverse-square law</strong> — one of the most universal relationships in physics. Double the distance, and the brightness drops to a quarter.</p>
+
+        <p>Plugging in Earth's mean distance of 1 Astronomical Unit (AU $= 1.496 \times 10^{11}$ m) gives us the <strong>Solar Constant</strong>:</p>
+
+        <div class="article__equation article__equation--boxed">
+          $$S_0 = \frac{L_\odot}{4\pi\,\text{AU}^2} \approx 1361 \text{ W/m}^2$$
+        </div>
+
+        <p>$S_0$ is the power density arriving at a surface perpendicular to the Sun's rays, just outside Earth's atmosphere. Think of it as the "raw input" before the atmosphere takes its cut — and it is the single most important number in all of solar energy.</p>
+
+        <div class="article__callout">
+          <strong>Intuition check:</strong> 1361 W/m² is roughly the output of a household hair dryer — delivered to <em>every single square metre</em> facing the Sun, from 150 million kilometres away. The Sun's generosity is remarkable.
+        </div>
+
+        <!-- Chart: Inverse-square law -->
+        <div class="article__chart" id="chart-inverse-square" aria-label="Interactive chart showing irradiance vs distance from the Sun"></div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 2 — Earth's Orbit                                           -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-2" data-reveal>
+        <div class="article__step-badge">Step 2</div>
+        <h2>Earth's Elliptical Orbit</h2>
+        <h3>How the Earth–Sun distance varies over the year</h3>
+
+        <p>We said $S_0$ assumes Earth's <em>mean</em> distance. But Earth's orbit is not a perfect circle — it is a slight ellipse, as Kepler discovered four centuries ago. The eccentricity is small ($e = 0.0167$, just 1.7%), yet it modulates the top-of-atmosphere irradiance by a noticeable $\pm 3.4\%$ over the year.</p>
+
+        <p>Since irradiance scales as $d^{-2}$, we define the <strong>extraterrestrial irradiance</strong> (ETR):</p>
+
+        <div class="article__equation">
+          $$G_{\text{ext}}(n) = S_0 \cdot E_0(n)$$
+        </div>
+
+        <p>where $E_0(n)$ is the <strong>eccentricity correction factor</strong>. Spencer (1971) provides a compact harmonic approximation:</p>
+
+        <div class="article__equation">
+          $$E_0 = 1.000110 + 0.034221\cos B + 0.001280\sin B + 0.000719\cos 2B + 0.000077\sin 2B$$
+        </div>
+
+        <p>with the day angle $B = 2\pi(n-1)/365.25$ in radians, where $n$ is the day of the year (January 1 = day 1).</p>
+
+        <p>Here is a counterintuitive fact: Earth is <strong>closest to the Sun in early January</strong> — the depth of Northern-Hemisphere winter. This is a vivid reminder that <em>seasons are caused by Earth's tilt, not its distance</em>.</p>
+
+        <!-- Chart: ETR over the year -->
+        <div class="article__chart" id="chart-etr" aria-label="Interactive chart showing extraterrestrial irradiance over the year"></div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 3 — Declination                                             -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-3" data-reveal>
+        <div class="article__step-badge">Step 3</div>
+        <h2>Earth's Axial Tilt and the Seasons</h2>
+        <h3>Deriving the solar declination angle</h3>
+
+        <p>If distance doesn't cause the seasons, what does? The answer is <strong>tilt</strong>. Earth's spin axis is inclined by $\varepsilon = 23.44{^\circ}$ relative to the plane of its orbit. As Earth circles the Sun, this tilt stays fixed in space (pointing roughly toward Polaris), so the Sun appears to migrate north and south across the sky over the course of a year.</p>
+
+        <p>The <strong>declination angle</strong> $\delta$ captures this motion: it is the latitude at which the Sun stands directly overhead at solar noon. It sweeps from $+23.44{^\circ}$ at the summer solstice (around June 21) through $0{^\circ}$ at the equinoxes to $-23.44{^\circ}$ at the winter solstice (around December 21).</p>
+
+        <p>The angle swept from the vernal equinox (around March 21, day $n_0 \approx 81$) is:</p>
+
+        <div class="article__equation">
+          $$\psi = \frac{360{^\circ}}{365.25}\,(n - 81)$$
+        </div>
+
+        <p>Projecting Earth's tilted axis gives us a simple approximation:</p>
+
+        <div class="article__equation">
+          $$\delta \approx 23.44{^\circ}\sin\left(\frac{360{^\circ}}{365.25}(n-81)\right)$$
+        </div>
+
+        <p>For higher accuracy, the Spencer (1971) harmonic series is preferred:</p>
+
+        <div class="article__equation">
+          $$\delta = 0.006918 - 0.399912\cos B + 0.070257\sin B - 0.006758\cos 2B + 0.000907\sin 2B - 0.002697\cos 3B + 0.001480\sin 3B$$
+        </div>
+
+        <p>Declination is the astronomical equivalent of latitude for the Sun — it tells us <strong>how high</strong> the Sun can climb at noon on any given day.</p>
+
+        <!-- Chart: Declination over the year -->
+        <div class="article__chart" id="chart-declination" aria-label="Interactive chart showing solar declination angle over the year"></div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 4 — Solar Position                                          -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-4" data-reveal>
+        <div class="article__step-badge">Step 4</div>
+        <h2>The Sun's Path Across Your Sky</h2>
+        <h3>Solar altitude and azimuth from spherical trigonometry</h3>
+
+        <p>Knowing the declination is only half the story — we also need the Sun's position at every <em>hour</em>, not just noon. We work in the <strong>local horizontal coordinate system</strong>: altitude $\alpha$ (angle above the horizon) and azimuth $A_z$ (compass direction, measured clockwise from North).</p>
+
+        <p>Three ingredients combine to pin down the Sun's position at any moment:</p>
+        <ul>
+          <li><strong>Latitude</strong> $\varphi$: your location on Earth</li>
+          <li><strong>Declination</strong> $\delta(n)$: the Sun's celestial latitude (Step 3)</li>
+          <li><strong>Hour angle</strong> $\omega$: how far the Sun is from solar noon. Earth rotates at 15°/hour, so $\omega = 15{^\circ} \times (T_{\text{solar}} - 12)$</li>
+        </ul>
+
+        <p>Applying the <strong>spherical law of cosines</strong> to the triangle formed by the zenith, the celestial pole, and the Sun yields the master formula of solar geometry:</p>
+
+        <div class="article__equation article__equation--boxed">
+          $$\sin\alpha = \sin\varphi\sin\delta + \cos\varphi\cos\delta\cos\omega$$
+        </div>
+
+        <p>Given your latitude $\varphi$, today's declination $\delta$, and the current hour angle $\omega$, this single equation is enough to locate the Sun in your sky.</p>
+
+        <p>Sunrise and sunset occur when $\alpha = 0$, giving the <strong>sunrise hour angle</strong>:</p>
+
+        <div class="article__equation">
+          $$\omega_s = \arccos(-\tan\varphi\tan\delta)$$
+        </div>
+
+        <p>Above the Arctic or Antarctic circles ($|\varphi| > 90{^\circ} - |\delta|$), this equation has no solution — the Sun never sets (midnight sun) or never rises (polar night).</p>
+
+        <div class="article__callout">
+          <strong>Reading the chart below:</strong> Each curve traces the Sun's path across the sky dome for a given day. The centre is directly overhead; the outer ring is the horizon. North is at the top. Hover to see exact altitude and azimuth values.
+        </div>
+
+        <!-- Chart: Sun path polar diagrams -->
+        <div class="article__chart-row">
+          <div class="article__chart article__chart--third" id="chart-sunpath-berlin" aria-label="Sun path diagram for Berlin"></div>
+          <div class="article__chart article__chart--third" id="chart-sunpath-equator" aria-label="Sun path diagram for the Equator"></div>
+          <div class="article__chart article__chart--third" id="chart-sunpath-capetown" aria-label="Sun path diagram for Cape Town"></div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 5 — Atmosphere                                              -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-5" data-reveal>
+        <div class="article__step-badge">Step 5</div>
+        <h2>The Atmosphere as a Filter</h2>
+        <h3>Beer–Lambert law, air mass, and clear-sky irradiance</h3>
+
+        <p>So far, we have been working in the vacuum of space. But sunlight must still pass through roughly 100 km of atmosphere before it reaches your panel — and the atmosphere is far from transparent. The same physics that paints the sky blue (Rayleigh scattering) and sunsets red (long slant paths) also attenuates the solar beam.</p>
+
+        <h4>Air mass</h4>
+        <p>The key geometric quantity is the <strong>air mass</strong> (AM): the ratio of the actual atmospheric path length to a straight-up vertical path. For a simple plane-parallel atmosphere:</p>
+
+        <div class="article__equation">
+          $$\text{AM} \approx \frac{1}{\sin\alpha}$$
+        </div>
+
+        <p>When the Sun is directly overhead, $\alpha = 90{^\circ}$ and AM = 1 — the reference condition known as <strong>AM1</strong>. At sunrise or sunset, $\alpha \rightarrow 0$ and the air mass soars. For large zenith angles where Earth's curvature matters, the <strong>Kasten–Young</strong> empirical formula handles the correction:</p>
+
+        <div class="article__equation">
+          $$\text{AM} = \frac{1}{\sin\alpha + 0.50572\,(\alpha_{\text{deg}} + 6.07995)^{-1.6364}}$$
+        </div>
+
+        <p>At a site of elevation $h$ metres, the air above is thinner. A barometric correction accounts for this: $\text{AM}_{\text{corr}} = \text{AM} \times e^{-h/8435}$.</p>
+
+        <h4>Direct Normal Irradiance</h4>
+        <p>The <strong>Beer–Lambert law</strong> describes exponential attenuation in any absorbing medium. For a clear sky, the Meinel (1976) empirical approximation gives a satisfyingly simple result:</p>
+
+        <div class="article__equation article__equation--boxed">
+          $$\text{DNI} = G_{\text{ext}} \times 0.7^{\text{AM}^{0.678}}$$
+        </div>
+
+        <p>Here DNI is the <strong>Direct Normal Irradiance</strong> — the beam reaching a surface aimed straight at the Sun. At AM1, roughly 30% of the extraterrestrial power is lost: $\text{DNI} = 1361 \times 0.7 \approx 953$ W/m².</p>
+
+        <h4>Diffuse and Global Irradiance</h4>
+        <p>Not all scattered photons are "lost" — many reach the ground from the sky dome as <strong>diffuse</strong> irradiance: $\text{DHI} \approx 0.1\,G_{\text{ext}}\sin\alpha$. The total irradiance on a horizontal surface is the <strong>Global Horizontal Irradiance</strong>:</p>
+
+        <div class="article__equation">
+          $$\text{GHI} = \text{DNI}\sin\alpha + \text{DHI}$$
+        </div>
+
+        <div class="article__callout article__callout--note">
+          <strong>Note:</strong> Real-world atmospheres contain aerosols, humidity, and clouds. This clear-sky model gives a useful upper bound; actual annual yields are typically 60–85% of these predictions, depending on local climate.
+        </div>
+
+        <!-- Chart: Air mass and DNI -->
+        <div class="article__chart" id="chart-atmosphere" aria-label="Interactive chart showing atmospheric effects on irradiance"></div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 6 — Tilted Panel                                            -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-6" data-reveal>
+        <div class="article__step-badge">Step 6</div>
+        <h2>Irradiance on a Tilted Panel</h2>
+        <h3>Angle of incidence from vector geometry</h3>
+
+        <p>We now arrive at the heart of the problem. A solar panel is not horizontal — it is tilted toward the Sun. How much light it intercepts depends on the <strong>cosine law</strong>: when the Sun's rays make an angle $\theta$ with the panel's normal vector, the irradiance drops by $\cos\theta$. (Think of a flashlight shining straight at a wall versus at a glancing angle.)</p>
+
+        <p>We describe the panel's orientation with two angles:</p>
+        <ul>
+          <li><strong>Tilt</strong> $\beta$: angle from horizontal (0° = flat, 90° = vertical)</li>
+          <li><strong>Azimuth</strong> $\gamma$: compass direction the panel faces (South = 180° in the Northern Hemisphere)</li>
+        </ul>
+
+        <p>Using unit vectors for the Sun direction $\hat{s}$ and panel normal $\hat{n}$ in the local horizontal coordinate system, the dot product gives:</p>
+
+        <div class="article__equation article__equation--boxed">
+          $$\cos\theta = \sin\alpha\cos\beta + \cos\alpha\sin\beta\cos(A_z - \gamma)$$
+        </div>
+
+        <p>This elegant formula packs all the geometry into a single line. For a horizontal panel ($\beta = 0$): $\cos\theta = \sin\alpha$ — the irradiance depends only on how high the Sun is. For a vertical south-facing panel at solar noon: $\cos\theta = \cos\alpha$.</p>
+
+        <h4>Three components of panel irradiance</h4>
+        <p>A tilted panel collects light from three sources (Liu &amp; Jordan 1963, isotropic sky model):</p>
+
+        <div class="article__equation article__equation--boxed">
+          $$G_T = \underbrace{\text{DNI}\cdot\cos\theta}_{\text{direct beam}} + \underbrace{\text{DHI}\cdot\tfrac{1+\cos\beta}{2}}_{\text{sky diffuse}} + \underbrace{\text{GHI}\cdot\rho\cdot\tfrac{1-\cos\beta}{2}}_{\text{ground-reflected}}$$
+        </div>
+
+        <p>where $\rho \approx 0.2$ is the ground <strong>albedo</strong> (reflectivity). The $(1+\cos\beta)/2$ factor is the panel's view factor to the sky dome.</p>
+
+        <!-- Chart: Panel irradiance over a day -->
+        <div class="article__chart" id="chart-panel-irradiance" aria-label="Interactive chart showing panel irradiance for different orientations"></div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 7 — Electrical Power                                        -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-7" data-reveal>
+        <div class="article__step-badge">Step 7</div>
+        <h2>From Irradiance to Electrical Power</h2>
+        <h3>Panel efficiency and temperature derating</h3>
+
+        <p>We now know how much sunlight reaches the panel surface. The final step is converting photons into electrons — and that conversion is never 100% efficient.</p>
+
+        <p><strong>1. Panel area and efficiency:</strong></p>
+        <div class="article__equation">
+          $$P = A \times \eta \times G_T$$
+        </div>
+
+        <p>where $A$ is the panel area in m² and $\eta$ is the <strong>conversion efficiency</strong>. Modern monocrystalline silicon panels achieve 17–23% under standard test conditions (STC: $G_T = 1000$ W/m², cell temperature = 25°C).</p>
+
+        <p><strong>2. Temperature derating:</strong> Solar cells lose efficiency as they heat up — an inherent semiconductor effect. The relationship is approximately linear:</p>
+
+        <div class="article__equation">
+          $$\eta(T_{\text{cell}}) = \eta_{\text{STC}}\,\left[1 - \gamma_T\,(T_{\text{cell}} - 25{^\circ}\text{C})\right]$$
+        </div>
+
+        <p>where $\gamma_T \approx 0.004\,/{^\circ}\text{C}$ for monocrystalline silicon. On a hot day, a panel at 60°C operates at just $1 - 0.004 \times 35 = 86\%$ of its rated efficiency — a significant penalty.</p>
+
+        <p>The <strong>full instantaneous power equation</strong>:</p>
+
+        <div class="article__equation article__equation--boxed">
+          $$P(n,t) = A\,\eta_{\text{STC}}\left[1 - \gamma_T\left(T_{\text{amb}} + \frac{\text{NOCT}-20}{800}G_T - 25\right)\right]G_T$$
+        </div>
+
+        <p>where NOCT is the Nominal Operating Cell Temperature (typically 45°C).</p>
+
+        <!-- Chart: Power output -->
+        <div class="article__chart" id="chart-power" aria-label="Interactive chart showing daily power output with and without temperature correction"></div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 8 — Annual Energy                                           -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="step-8" data-reveal>
+        <div class="article__step-badge">Step 8</div>
+        <h2>Annual Energy: Integrating Over a Full Year</h2>
+        <h3>Putting all the pieces together</h3>
+
+        <p>We now have every ingredient. The <strong>annual electrical energy yield</strong> is the grand integral over all 365 days and 24 hours:</p>
+
+        <div class="article__equation">
+          $$E_{\text{annual}} = \int_0^{365}\int_0^{24} P(n,\,t)\;dt\;dn$$
+        </div>
+
+        <p>No closed-form solution exists — every link in our chain depends on time in a different way. We evaluate the integral <strong>numerically</strong> with a midpoint Riemann sum and 30-minute time steps.</p>
+
+        <p>The heatmap below reveals annual yield as a function of tilt $\beta$ and azimuth $\gamma$ — the two orientation parameters an installer can choose. The optimal orientation is marked with a star. Notice how flat the peak is: modest deviations from the optimum cost surprisingly little energy.</p>
+
+        <!-- Chart: Orientation heatmap + monthly profile -->
+        <div class="article__chart" id="chart-annual-heatmap" aria-label="Interactive heatmap showing annual yield by panel orientation"></div>
+        <div class="article__chart-row">
+          <div class="article__chart article__chart--half" id="chart-tilt-sweep" aria-label="Chart showing annual yield vs tilt angle"></div>
+          <div class="article__chart article__chart--half" id="chart-monthly" aria-label="Chart showing average daily yield by month"></div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- STEP 9 — Interactive Explorer                                    -->
+      <!-- ================================================================ -->
+      <section class="article__section article__section--interactive" id="step-9" data-reveal>
+        <div class="article__step-badge article__step-badge--interactive">Interactive</div>
+        <h2>Solar Panel Explorer</h2>
+        <h3>Tune the calculation to your location and hardware</h3>
+
+        <p>Use the sliders below to explore how the annual yield and optimal orientation change with your location and hardware. Every computation runs entirely in your browser — nothing is sent anywhere.</p>
+
+        <div class="explorer">
+          <div class="explorer__controls">
+            <div class="explorer__slider-group">
+              <label for="slider-lat">Latitude</label>
+              <div class="explorer__slider-row">
+                <input type="range" id="slider-lat" min="-60" max="70" value="48" step="1" class="explorer__range">
+                <output for="slider-lat" class="explorer__value" id="val-lat">48°</output>
+              </div>
+            </div>
+            <div class="explorer__slider-group">
+              <label for="slider-elev">Elevation</label>
+              <div class="explorer__slider-row">
+                <input type="range" id="slider-elev" min="0" max="3000" value="500" step="100" class="explorer__range">
+                <output for="slider-elev" class="explorer__value" id="val-elev">500 m</output>
+              </div>
+            </div>
+            <div class="explorer__slider-group">
+              <label for="slider-area">Panel area</label>
+              <div class="explorer__slider-row">
+                <input type="range" id="slider-area" min="1" max="50" value="10" step="1" class="explorer__range">
+                <output for="slider-area" class="explorer__value" id="val-area">10 m²</output>
+              </div>
+            </div>
+            <div class="explorer__slider-group">
+              <label for="slider-eff">Efficiency</label>
+              <div class="explorer__slider-row">
+                <input type="range" id="slider-eff" min="10" max="25" value="20" step="0.5" class="explorer__range">
+                <output for="slider-eff" class="explorer__value" id="val-eff">20%</output>
+              </div>
+            </div>
+          </div>
+
+          <div class="explorer__results" id="explorer-results">
+            <div class="explorer__stat">
+              <span class="explorer__stat-value" id="stat-opt-tilt">—</span>
+              <span class="explorer__stat-label">Optimal tilt</span>
+            </div>
+            <div class="explorer__stat">
+              <span class="explorer__stat-value" id="stat-opt-az">—</span>
+              <span class="explorer__stat-label">Optimal azimuth</span>
+            </div>
+            <div class="explorer__stat explorer__stat--highlight">
+              <span class="explorer__stat-value" id="stat-annual">—</span>
+              <span class="explorer__stat-label">Annual yield</span>
+            </div>
+            <div class="explorer__stat">
+              <span class="explorer__stat-value" id="stat-gain">—</span>
+              <span class="explorer__stat-label">Gain vs horizontal</span>
+            </div>
+          </div>
+
+          <div class="explorer__charts">
+            <div class="article__chart" id="chart-explorer-heatmap" aria-label="Interactive heatmap for the explorer"></div>
+            <div class="article__chart-row">
+              <div class="article__chart article__chart--half" id="chart-explorer-tilt" aria-label="Explorer tilt sweep chart"></div>
+              <div class="article__chart article__chart--half" id="chart-explorer-monthly" aria-label="Explorer monthly chart"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- SUMMARY                                                          -->
+      <!-- ================================================================ -->
+      <section class="article__section" id="summary" data-reveal>
+        <h2>Summary &amp; Key Results</h2>
+        <h3>The complete chain from photon to kilowatt-hour</h3>
+
+        <div class="article__table-wrap">
+          <table class="article__table article__table--summary">
+            <thead>
+              <tr><th>Layer</th><th>Key equation</th><th>Key result</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nuclear furnace</td>
+                <td>$E = \Delta m\,c^2$</td>
+                <td>$L_\odot = 3.828 \times 10^{26}$ W</td>
+              </tr>
+              <tr>
+                <td>Inverse-square law</td>
+                <td>$S_0 = L_\odot/(4\pi\,\text{AU}^2)$</td>
+                <td>$S_0 = 1361$ W/m²</td>
+              </tr>
+              <tr>
+                <td>Orbital mechanics</td>
+                <td>$G_{\text{ext}}(n) = S_0\,E_0(n)$</td>
+                <td>±3.4% seasonal variation</td>
+              </tr>
+              <tr>
+                <td>Spherical geometry</td>
+                <td>$\sin\alpha = \sin\varphi\sin\delta + \cos\varphi\cos\delta\cos\omega$</td>
+                <td>Sun path depends on lat &amp; season</td>
+              </tr>
+              <tr>
+                <td>Beer-Lambert</td>
+                <td>$\text{DNI} = G_{\text{ext}} \times 0.7^{\text{AM}^{0.678}}$</td>
+                <td>~30% lost to atmosphere at AM1</td>
+              </tr>
+              <tr>
+                <td>Cosine law + geometry</td>
+                <td>$G_T = \text{DNI}\cos\theta + …$</td>
+                <td>Orientation is the key free variable</td>
+              </tr>
+              <tr>
+                <td>Semiconductor physics</td>
+                <td>$P = A\,\eta\,G_T$</td>
+                <td>Annual yield: 800–1800 kWh/kWp</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Rules of thumb (clear-sky, Northern Hemisphere)</h3>
+        <ul>
+          <li><strong>Optimal tilt</strong> ≈ latitude minus 10–15° (favouring summer, when daylight hours are longest)</li>
+          <li><strong>Optimal azimuth</strong> = due South (180° from North) in the Northern Hemisphere</li>
+          <li><strong>Sensitive?</strong> Less than you'd think — the annual yield curve is <em>flat</em> within ±15° of the optimum, so small orientation errors are forgiving</li>
+          <li><strong>East/West split:</strong> a 50/50 east–west split at 30° tilt loses only ~5% vs optimal south-facing, while better matching afternoon demand peaks</li>
+          <li><strong>Altitude bonus:</strong> +1,000 m elevation gains roughly 3–5% in annual irradiance thanks to a thinner atmosphere</li>
+        </ul>
+
+        <h3>From theory to practice: the Solarflower Solar Panel Advisor</h3>
+        <p>The physics above is <em>real</em> — but our model deliberately keeps things simple: an idealised clear sky, no clouds, and no hardware losses beyond temperature derating. Real-world annual yields typically reach only 60–85% of these clear-sky predictions.</p>
+        <p>The <a href="index.html#components" class="article__link--highlight"><strong>Solarflower Solar Panel Advisor</strong></a> closes that gap. It builds on the same first-principles physics, but layers on a full production-grade simulation pipeline:</p>
+        <ul>
+          <li><strong>Real weather data</strong> — satellite-derived irradiance from the PVGIS Typical Meteorological Year (20+ years of SARAH-3/ERA5 observations), inherently including cloud cover, precipitation, and regional climate patterns</li>
+          <li><strong>Anisotropic sky model</strong> — the Perez diffuse irradiance model, which captures circumsolar brightening and horizon effects instead of assuming a uniform sky dome</li>
+          <li><strong>Incidence angle modifier (IAM)</strong> — Fresnel reflection losses off the glass cover at steep incidence angles, modelled per-timestep</li>
+          <li><strong>Thermal model</strong> — the Faiman cell temperature model using real air temperature and wind speed, not simplified assumptions</li>
+          <li><strong>Full single-diode electrical model</strong> — IV-curve resolution via the PVsyst one-diode model with series and shunt resistance, instead of a flat efficiency factor</li>
+          <li><strong>Inverter efficiency curves</strong> — CEC Sandia inverter modelling, including clipping and threshold losses at low irradiance</li>
+          <li><strong>System losses chain</strong> — soiling (dust/dirt), light-induced degradation, module mismatch, DC and AC wiring losses, transformer losses, and availability downtime</li>
+          <li><strong>Component databases</strong> — access to over 15,000 real PV modules and 3,000 inverters from the CEC databases, with support for custom PVsyst component files</li>
+        </ul>
+        <p>The physics you've learned here is the foundation that all of these refinements rest on. Understanding the first principles means you can read a professional yield report and know <em>exactly</em> what each number means.</p>
+
+        <p class="article__coda"><em>Derived from first principles: nuclear physics → orbital mechanics → spherical trigonometry → atmospheric optics → semiconductor physics.</em></p>
+      </section>
+
+    </div><!-- /.article__container -->
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                             -->
+  <!-- ================================================================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
+        <span>Solarflower</span>
+      </div>
+      <p class="footer__copy">&copy; 2025 Robin Gutzen &middot; <a href="https://github.com/rgutzen/solarflower-app/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0-or-later</a></p>
+      <div class="footer__links">
+        <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="mailto:robin.gutzen@outlook.com" aria-label="Email Robin Gutzen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- KaTeX rendering triggered via onload on auto-render script above -->
+  <script src="article.js"></script>
+</body>
+</html>

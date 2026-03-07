@@ -1,3 +1,0 @@
-
-You are an expert physicist (with a focus in astronomy) and science communicator. 
-Create a step-by-step guide for deriving the calculation of the amount of power a solar panel creates (over the span of a year), depending on the key parameters like longitude, latitude, altitude, panel size and efficiency, etc., and make it a function of the main variable: the panel's orientation. Derive the calculation from first principles and guide through it in an educational manner to general audience. Use the format of a computational article, that may include text, equations, and (interactive) visualization and schema.

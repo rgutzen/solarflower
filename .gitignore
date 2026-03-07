@@ -1,3 +1,7 @@
+# Claude
+./claude/
+notes.md
+
 # Python
 __pycache__/
 *.py[cod]
@@ -19,8 +23,11 @@ env/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Streamlit
-.streamlit/
+# Streamlit — ignore secrets and credentials but track config.toml
+.streamlit/secrets.toml
+.streamlit/credentials.toml
+**/.streamlit/secrets.toml
+**/.streamlit/credentials.toml
 
 # Data / cache (fetched climate data — can be large and is re-fetched on demand)
 solar-app/.cache/

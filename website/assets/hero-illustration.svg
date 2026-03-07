@@ -1,0 +1,122 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4EDFF" />
+      <stop offset="100%" stop-color="#F0F7FF" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD470" />
+      <stop offset="100%" stop-color="#F5A623" />
+    </linearGradient>
+    <linearGradient id="panelFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2D7DD2" />
+      <stop offset="100%" stop-color="#1B5FA0" />
+    </linearGradient>
+    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8F5E9" />
+      <stop offset="100%" stop-color="#C8E6C9" />
+    </linearGradient>
+    <filter id="sunGlow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="600" height="400" fill="url(#skyGrad)"/>
+
+  <!-- Sun with glow -->
+  <circle cx="480" cy="80" r="50" fill="url(#sunGrad)" filter="url(#sunGlow)" opacity="0.9">
+    <animate attributeName="r" values="48;52;48" dur="4s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Sun rays -->
+  <g stroke="#F5A623" stroke-width="2" stroke-linecap="round" opacity="0.4">
+    <line x1="480" y1="15" x2="480" y2="5">
+      <animate attributeName="y2" values="5;0;5" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="530" y1="30" x2="545" y2="18">
+      <animate attributeName="x2" values="545;550;545" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="545" y1="80" x2="558" y2="80">
+      <animate attributeName="x2" values="558;563;558" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="530" y1="130" x2="545" y2="142">
+      <animate attributeName="x2" values="545;550;545" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="430" y1="30" x2="415" y2="18">
+      <animate attributeName="x2" values="415;410;415" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="415" y1="80" x2="402" y2="80">
+      <animate attributeName="x2" values="402;397;402" dur="4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="430" y1="130" x2="415" y2="142">
+      <animate attributeName="x2" values="415;410;415" dur="4s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Light beams from sun to panel -->
+  <g stroke="#F5A623" stroke-width="1" opacity="0.12">
+    <line x1="440" y1="110" x2="200" y2="250"/>
+    <line x1="450" y1="115" x2="230" y2="240"/>
+    <line x1="460" y1="120" x2="260" y2="230"/>
+    <line x1="470" y1="125" x2="290" y2="245"/>
+    <line x1="445" y1="118" x2="215" y2="260"/>
+  </g>
+
+  <!-- Ground -->
+  <ellipse cx="300" cy="360" rx="320" ry="60" fill="url(#groundGrad)" opacity="0.7"/>
+
+  <!-- Panel mount pole -->
+  <rect x="237" y="290" width="6" height="60" rx="2" fill="#78909C"/>
+
+  <!-- Solar panel (tilted) -->
+  <g transform="translate(240, 250) rotate(-25)">
+    <!-- Panel shadow -->
+    <rect x="5" y="5" width="140" height="80" rx="4" fill="#000" opacity="0.08"/>
+    <!-- Panel frame -->
+    <rect x="0" y="0" width="140" height="80" rx="4" fill="#37474F" stroke="#263238" stroke-width="1.5"/>
+    <!-- Panel cells -->
+    <rect x="5" y="5" width="62" height="33" rx="2" fill="url(#panelFace)"/>
+    <rect x="73" y="5" width="62" height="33" rx="2" fill="url(#panelFace)"/>
+    <rect x="5" y="42" width="62" height="33" rx="2" fill="url(#panelFace)"/>
+    <rect x="73" y="42" width="62" height="33" rx="2" fill="url(#panelFace)"/>
+    <!-- Cell grid lines -->
+    <g stroke="#fff" stroke-width="0.4" opacity="0.3">
+      <line x1="26" y1="5" x2="26" y2="38"/>
+      <line x1="46" y1="5" x2="46" y2="38"/>
+      <line x1="94" y1="5" x2="94" y2="38"/>
+      <line x1="114" y1="5" x2="114" y2="38"/>
+      <line x1="26" y1="42" x2="26" y2="75"/>
+      <line x1="46" y1="42" x2="46" y2="75"/>
+      <line x1="94" y1="42" x2="94" y2="75"/>
+      <line x1="114" y1="42" x2="114" y2="75"/>
+      <line x1="5" y1="20" x2="67" y2="20"/>
+      <line x1="73" y1="20" x2="135" y2="20"/>
+      <line x1="5" y1="58" x2="67" y2="58"/>
+      <line x1="73" y1="58" x2="135" y2="58"/>
+    </g>
+    <!-- Glint / reflection -->
+    <rect x="10" y="8" width="20" height="6" rx="2" fill="#fff" opacity="0.15"/>
+  </g>
+
+  <!-- Small decorative elements — grass tufts -->
+  <g fill="#66BB6A" opacity="0.5">
+    <ellipse cx="100" cy="350" rx="15" ry="5"/>
+    <ellipse cx="400" cy="345" rx="12" ry="4"/>
+    <ellipse cx="500" cy="355" rx="18" ry="5"/>
+    <ellipse cx="150" cy="358" rx="10" ry="3"/>
+  </g>
+
+  <!-- Small flower accent -->
+  <g transform="translate(420, 330)">
+    <line x1="0" y1="0" x2="0" y2="20" stroke="#66BB6A" stroke-width="2"/>
+    <circle cx="0" cy="-3" r="5" fill="#F5A623" opacity="0.7"/>
+    <circle cx="0" cy="-3" r="2" fill="#E8920E"/>
+  </g>
+</svg>

@@ -160,6 +160,63 @@ with tab1:
         })
         st.dataframe(loss_df, use_container_width=True, hide_index=True)
 
+    # Export
+    with st.expander("Download Results"):
+        import io, json
+
+        monthly_export_df = pd.DataFrame({
+            "Month": ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+            "Avg_daily_yield_kWh_day": result.monthly_yield_kwh_day.values.round(3),
+            "Performance_Ratio": (result.monthly_pr * 100).values.round(2),
+        })
+
+        summary = {
+            "location": {
+                "lat": cfg["lat"], "lon": cfg["lon"], "elevation_m": cfg["elevation_m"],
+            },
+            "orientation": {
+                "tilt_deg": cfg["tilt_deg"], "azimuth_deg": cfg["panel_az_deg"],
+            },
+            "system": {
+                "peak_power_kw": round(result.peak_power_kw, 3),
+                "n_modules": cfg["n_modules"],
+            },
+            "results": {
+                "annual_yield_kwh": round(result.annual_yield_kwh, 1),
+                "specific_yield_kwh_kwp": round(result.specific_yield_kwh_kwp, 1),
+                "performance_ratio_pct": round(result.performance_ratio * 100, 2),
+                "capacity_factor_pct": round(result.capacity_factor * 100, 2),
+                "avg_daily_yield_kwh": round(result.annual_yield_kwh / 365, 2),
+                "data_source": data_source,
+            },
+            "monthly_yield_kwh_day": {
+                m: round(v, 3)
+                for m, v in zip(
+                    ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+                    result.monthly_yield_kwh_day.values,
+                )
+            },
+            "loss_waterfall_kwh": {k: round(v, 1) for k, v in result.loss_waterfall.items()},
+        }
+
+        col_dl1, col_dl2 = st.columns(2)
+        with col_dl1:
+            st.download_button(
+                "Download Monthly CSV",
+                monthly_export_df.to_csv(index=False),
+                file_name="solar_advisor_monthly.csv",
+                mime="text/csv",
+                use_container_width=True,
+            )
+        with col_dl2:
+            st.download_button(
+                "Download Full Summary JSON",
+                json.dumps(summary, indent=2),
+                file_name="solar_advisor_summary.json",
+                mime="application/json",
+                use_container_width=True,
+            )
+
 # ---- Tab 2: Orientation Optimizer -----------------------------------------
 with tab2:
     tilt_arr = np.arange(0, 91, cfg["tilt_step"])

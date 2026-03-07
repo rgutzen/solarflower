@@ -1,0 +1,994 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Advisor — Professional PV Yield Simulation | Solarflower</title>
+  <meta name="description" content="Professional-grade solar panel yield simulation. Real PVGIS climate data, PVsyst-equivalent physics, 15,000+ module database, and an interactive orientation optimizer.">
+  <meta name="author" content="Robin Gutzen">
+  <meta name="theme-color" content="#F5A623">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Solar Advisor — Solarflower">
+  <meta property="og:description" content="Professional-grade PV yield simulation for any location worldwide.">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ---- Page-specific additions ---- */
+
+    /* Page hero (narrower than landing hero) */
+    .app-hero {
+      padding: calc(64px + var(--sp-12)) 0 var(--sp-16);
+      background: linear-gradient(160deg, var(--bg-warm) 0%, #EDF4FF 60%, #E8F5E9 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-hero__blob {
+      position: absolute;
+      pointer-events: none;
+    }
+    .app-hero__blob--1 {
+      width: 480px; height: 480px;
+      top: -120px; right: -80px;
+      opacity: 0.7;
+      animation: blobFloat 22s ease-in-out infinite;
+    }
+    .app-hero__blob--2 {
+      width: 340px; height: 340px;
+      bottom: -80px; left: -60px;
+      opacity: 0.5;
+      animation: blobFloat 28s ease-in-out infinite reverse;
+    }
+
+    .app-hero__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-12);
+      align-items: center;
+      position: relative;
+    }
+
+    .app-hero__breadcrumb {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      margin-bottom: var(--sp-4);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+    .app-hero__breadcrumb a { color: var(--amber); font-weight: 500; }
+    .app-hero__breadcrumb a:hover { text-decoration: underline; }
+
+    .app-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: var(--sp-1) var(--sp-3);
+      border-radius: 99px;
+      margin-bottom: var(--sp-4);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .app-hero__title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: var(--sp-5);
+    }
+
+    .app-hero__subtitle {
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+      margin-bottom: var(--sp-8);
+      max-width: 480px;
+    }
+
+    .app-hero__actions {
+      display: flex;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    .app-hero__visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-hero__mockup {
+      width: 100%;
+      max-width: 480px;
+      background: #1e1e2e;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(27, 46, 27, 0.18), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .mockup__titlebar {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: var(--sp-3) var(--sp-4);
+      background: #161622;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mockup__dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .mockup__dot--red   { background: #FF5F57; }
+    .mockup__dot--amber { background: #FEBC2E; }
+    .mockup__dot--green { background: #28C840; }
+
+    .mockup__url {
+      flex: 1;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      font-family: var(--font-mono);
+    }
+
+    .mockup__body {
+      padding: var(--sp-5);
+    }
+
+    /* Metric row inside mockup */
+    .mockup__metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+    }
+    .mockup__metric {
+      background: #2a2a3e;
+      border-radius: var(--radius-sm);
+      padding: var(--sp-3);
+      text-align: center;
+    }
+    .mockup__metric-value {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #F5A623;
+      font-family: var(--font-mono);
+    }
+    .mockup__metric-label {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 2px;
+    }
+
+    /* Chart bar illustration inside mockup */
+    .mockup__chart {
+      background: #2a2a3e;
+      border-radius: var(--radius-sm);
+      padding: var(--sp-3) var(--sp-4);
+      height: 90px;
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .mockup__bar {
+      flex: 1;
+      border-radius: 3px 3px 0 0;
+      transition: opacity 0.2s;
+    }
+
+    .app-hero__wave {
+      position: absolute;
+      bottom: -1px; left: 0; right: 0; line-height: 0;
+    }
+    .app-hero__wave svg { width: 100%; height: 60px; }
+
+    /* ---- Features ---- */
+    .features {
+      padding: var(--sp-16) 0 var(--sp-20);
+      background: #fff;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-6);
+      margin-top: var(--sp-10);
+    }
+
+    .feature-card {
+      padding: var(--sp-6);
+      border: 1px solid rgba(76, 175, 80, 0.1);
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      transition: box-shadow var(--duration) var(--ease),
+                  border-color var(--duration) var(--ease);
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(76, 175, 80, 0.2);
+    }
+
+    .feature-card__icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--sp-4);
+    }
+    .feature-card__icon--amber { background: var(--amber-light); }
+    .feature-card__icon--blue  { background: var(--blue-light); }
+    .feature-card__icon--green { background: var(--green-light); }
+
+    .feature-card__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: var(--sp-2);
+    }
+    .feature-card__desc {
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      line-height: 1.65;
+    }
+
+    /* ---- Physics table ---- */
+    .physics {
+      padding: var(--sp-16) 0 var(--sp-20);
+      background: var(--grey-light);
+    }
+
+    .physics__table-wrap {
+      overflow-x: auto;
+      margin-top: var(--sp-10);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .physics__table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 0.875rem;
+    }
+    .physics__table thead th {
+      background: var(--ink);
+      color: #fff;
+      padding: var(--sp-3) var(--sp-5);
+      font-weight: 600;
+      text-align: left;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .physics__table tbody tr {
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background var(--duration) var(--ease);
+    }
+    .physics__table tbody tr:last-child { border-bottom: none; }
+    .physics__table tbody tr:hover { background: var(--amber-light); }
+    .physics__table tbody td {
+      padding: var(--sp-3) var(--sp-5);
+      color: var(--ink);
+      vertical-align: middle;
+    }
+    .physics__table tbody td:first-child { font-weight: 600; }
+    .physics__table td code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--grey-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ---- App Embed ---- */
+    .app-embed {
+      padding: var(--sp-16) 0 var(--sp-20);
+      background: var(--bg-warm);
+    }
+
+    .embed-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-10);
+      align-items: start;
+      margin-bottom: var(--sp-10);
+    }
+
+    .embed-steps {
+      list-style: none;
+      counter-reset: step-counter;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+    .embed-steps li {
+      counter-increment: step-counter;
+      display: flex;
+      gap: var(--sp-4);
+      align-items: flex-start;
+    }
+    .embed-steps li::before {
+      content: counter(step-counter);
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      background: var(--amber);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .embed-steps li strong { display: block; color: var(--ink); font-weight: 700; margin-bottom: 2px; }
+    .embed-steps li span { font-size: 0.875rem; color: var(--ink-light); }
+
+    .embed-shell {
+      background: #1e1e2e;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+    .embed-shell__header {
+      padding: var(--sp-2) var(--sp-4);
+      background: #161622;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .embed-shell__header::before {
+      content: "";
+      width: 8px; height: 8px;
+      background: #28C840;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .embed-shell__code {
+      padding: var(--sp-4) var(--sp-5);
+      font-size: 0.82rem;
+      color: #cdd6f4;
+      line-height: 1.7;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .embed-shell__code .c { color: #6c7086; }
+    .embed-shell__code .s { color: #a6e3a1; }
+    .embed-shell__code .k { color: #cba6f7; }
+
+    .embed-frame-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: #1e1e2e;
+    }
+
+    .embed-frame__bar {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: var(--sp-3) var(--sp-4);
+      background: #161622;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .embed-frame__dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .embed-frame__dot--r { background: #FF5F57; }
+    .embed-frame__dot--a { background: #FEBC2E; }
+    .embed-frame__dot--g { background: #28C840; }
+
+    .embed-frame__url {
+      flex: 1;
+      background: rgba(255,255,255,0.07);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      font-family: var(--font-mono);
+    }
+
+    .embed-frame__new-tab {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      padding: 3px 8px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .embed-frame__new-tab:hover {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .embed-placeholder {
+      height: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-5);
+      background: #22223a;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .embed-placeholder:hover { background: #282845; }
+
+    .embed-placeholder__icon {
+      width: 64px; height: 64px;
+      background: rgba(245, 166, 35, 0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .embed-placeholder__text {
+      text-align: center;
+    }
+    .embed-placeholder__text strong {
+      display: block;
+      color: #fff;
+      font-size: 1.05rem;
+      margin-bottom: var(--sp-2);
+    }
+    .embed-placeholder__text span {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .embed-iframe-container { position: relative; display: none; }
+    .embed-iframe-container iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+      display: block;
+    }
+
+    .embed-fallback {
+      height: 200px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-3);
+      background: #22223a;
+      text-align: center;
+      padding: var(--sp-6);
+    }
+    .embed-fallback p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.875rem;
+    }
+    .embed-fallback code {
+      color: #a6e3a1;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      background: rgba(255,255,255,0.06);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* ---- CTA banner ---- */
+    .cta-banner {
+      padding: var(--sp-16) 0;
+      background: linear-gradient(135deg, var(--ink) 0%, #2a3a2a 100%);
+      text-align: center;
+    }
+    .cta-banner h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: var(--sp-4);
+    }
+    .cta-banner p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.95rem;
+      max-width: 520px;
+      margin: 0 auto var(--sp-8);
+      line-height: 1.7;
+    }
+    .cta-banner__actions {
+      display: flex;
+      gap: var(--sp-4);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 960px) {
+      .app-hero__inner { grid-template-columns: 1fr; }
+      .app-hero__visual { display: none; }
+      .features__grid { grid-template-columns: 1fr 1fr; }
+      .embed-intro { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .features__grid { grid-template-columns: 1fr; }
+      .mockup__metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================== -->
+  <!-- NAVIGATION                                                         -->
+  <!-- ================================================================== -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__brand" aria-label="Solarflower home">
+        <img src="assets/logo.svg" alt="" width="36" height="36" class="nav__logo">
+        <span class="nav__wordmark">Solarflower</span>
+      </a>
+      <ul class="nav__links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#components">Components</a></li>
+        <li><a href="article.html">Article</a></li>
+        <li><a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="nav__github" aria-label="View on GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================================================================== -->
+  <!-- HERO                                                               -->
+  <!-- ================================================================== -->
+  <header class="app-hero">
+    <!-- Blobs -->
+    <svg class="app-hero__blob app-hero__blob--1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M44.7,-76.4C58.8,-69.2,71.8,-58.1,79.6,-44.2C87.4,-30.3,90,-13.6,88.2,2.4C86.4,18.4,80.2,33.6,70.3,45.7C60.4,57.8,46.8,66.7,32.4,73.5C18,80.3,2.8,85,-12.6,83.9C-28,82.8,-43.6,75.9,-56.2,65.3C-68.8,54.7,-78.4,40.4,-83.4,24.5C-88.4,8.6,-88.8,-8.9,-83.5,-24.1C-78.2,-39.3,-67.2,-52.2,-53.7,-59.7C-40.2,-67.2,-24.2,-69.3,-8.4,-73.2C7.4,-77.1,14.8,-82.8,27.4,-82.3C40,-81.8,57.8,-75,44.7,-76.4Z" transform="translate(100 100)" fill="url(#blobH1)"/>
+      <defs><linearGradient id="blobH1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2D7DD2" stop-opacity="0.07"/><stop offset="100%" stop-color="#F5A623" stop-opacity="0.04"/></linearGradient></defs>
+    </svg>
+    <svg class="app-hero__blob app-hero__blob--2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M39.9,-65.7C53.4,-60.5,67.1,-52.6,74.2,-40.8C81.3,-29,81.8,-13.3,79.3,1.5C76.8,16.3,71.3,30.1,62.5,41.2C53.7,52.3,41.6,60.7,28.4,66.3C15.2,71.9,0.9,74.7,-13.4,73.3C-27.7,71.9,-42,66.3,-53.2,57C-64.4,47.7,-72.5,34.7,-77,20.2C-81.5,5.7,-82.4,-10.3,-77.4,-24C-72.4,-37.7,-61.5,-49.1,-48.5,-54.6C-35.5,-60.1,-20.5,-59.7,-6.4,-62.2C7.7,-64.7,15.4,-70,26.4,-70.9C37.4,-71.8,51.6,-68.3,39.9,-65.7Z" transform="translate(100 100)" fill="url(#blobH2)"/>
+      <defs><linearGradient id="blobH2" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#66BB6A" stop-opacity="0.06"/><stop offset="100%" stop-color="#2D7DD2" stop-opacity="0.03"/></linearGradient></defs>
+    </svg>
+
+    <div class="container">
+      <div class="app-hero__inner">
+        <div class="app-hero__text">
+          <p class="app-hero__breadcrumb">
+            <a href="index.html">Solarflower</a>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Solar Advisor
+          </p>
+          <div class="app-hero__badge">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Professional Grade
+          </div>
+          <h1 class="app-hero__title">Solar Advisor</h1>
+          <p class="app-hero__subtitle">
+            PVsyst-equivalent yield simulation for any rooftop worldwide. Powered by 20+ years of PVGIS satellite data, a 15,000-module database, and a full DC/AC loss chain.
+          </p>
+          <div class="app-hero__actions">
+            <a href="#launch" class="btn btn--blue">
+              Launch App
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+              View Source
+            </a>
+          </div>
+        </div>
+
+        <!-- App mockup illustration -->
+        <div class="app-hero__visual" aria-hidden="true">
+          <div class="app-hero__mockup">
+            <div class="mockup__titlebar">
+              <span class="mockup__dot mockup__dot--red"></span>
+              <span class="mockup__dot mockup__dot--amber"></span>
+              <span class="mockup__dot mockup__dot--green"></span>
+              <span class="mockup__url">localhost:8501 · Solar Advisor</span>
+            </div>
+            <div class="mockup__body">
+              <div class="mockup__metrics">
+                <div class="mockup__metric">
+                  <div class="mockup__metric-value">8.0 kWp</div>
+                  <div class="mockup__metric-label">DC Peak</div>
+                </div>
+                <div class="mockup__metric">
+                  <div class="mockup__metric-value">10,240</div>
+                  <div class="mockup__metric-label">kWh/yr</div>
+                </div>
+                <div class="mockup__metric">
+                  <div class="mockup__metric-value">89.4%</div>
+                  <div class="mockup__metric-label">Perf. Ratio</div>
+                </div>
+                <div class="mockup__metric">
+                  <div class="mockup__metric-value">14.6%</div>
+                  <div class="mockup__metric-label">Cap. Factor</div>
+                </div>
+              </div>
+              <!-- Bar chart representing monthly yield -->
+              <div class="mockup__chart" role="img" aria-label="Monthly yield chart">
+                <div class="mockup__bar" style="height:30%; background:#2D7DD2; opacity:0.7;"></div>
+                <div class="mockup__bar" style="height:38%; background:#2D7DD2; opacity:0.7;"></div>
+                <div class="mockup__bar" style="height:56%; background:#2D7DD2; opacity:0.8;"></div>
+                <div class="mockup__bar" style="height:70%; background:#F5A623; opacity:0.8;"></div>
+                <div class="mockup__bar" style="height:85%; background:#F5A623; opacity:0.9;"></div>
+                <div class="mockup__bar" style="height:95%; background:#F5A623;"></div>
+                <div class="mockup__bar" style="height:100%; background:#F5A623;"></div>
+                <div class="mockup__bar" style="height:90%; background:#F5A623; opacity:0.9;"></div>
+                <div class="mockup__bar" style="height:72%; background:#F5A623; opacity:0.8;"></div>
+                <div class="mockup__bar" style="height:50%; background:#2D7DD2; opacity:0.8;"></div>
+                <div class="mockup__bar" style="height:33%; background:#2D7DD2; opacity:0.7;"></div>
+                <div class="mockup__bar" style="height:26%; background:#2D7DD2; opacity:0.6;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,50 C320,75 720,20 1080,50 C1260,65 1380,35 1440,45 L1440,80 L0,80 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- FEATURES                                                           -->
+  <!-- ================================================================== -->
+  <section class="features" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" id="features-heading">What it can do</h2>
+        <p class="section-lead">Every feature an energy consultant needs — in an open-source, self-hosted web app.</p>
+      </div>
+
+      <div class="features__grid">
+
+        <div class="feature-card" data-reveal>
+          <div class="feature-card__icon feature-card__icon--amber" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8920E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+          <h3 class="feature-card__title">PVGIS TMY Climate Data</h3>
+          <p class="feature-card__desc">Fetches 20+ year typical meteorological year data from the EU's PVGIS satellite database for any location on Earth. Falls back to Open-Meteo or clear-sky if unavailable.</p>
+        </div>
+
+        <div class="feature-card" data-reveal>
+          <div class="feature-card__icon feature-card__icon--blue" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B5FA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3 class="feature-card__title">PVsyst-equivalent Physics</h3>
+          <p class="feature-card__desc">Full hourly simulation chain: Perez anisotropic sky model, physical IAM, Faiman cell temperature, PVsyst one-diode SDM, and CEC Sandia inverter model.</p>
+        </div>
+
+        <div class="feature-card" data-reveal>
+          <div class="feature-card__icon feature-card__icon--green" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3 class="feature-card__title">15,000+ Module Database</h3>
+          <p class="feature-card__desc">Searchable CEC module database with full one-diode parameters. Also supports PVsyst .pan/.ond file import and a parametric quick-entry mode.</p>
+        </div>
+
+        <div class="feature-card" data-reveal>
+          <div class="feature-card__icon feature-card__icon--amber" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8920E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3 class="feature-card__title">Orientation Optimizer</h3>
+          <p class="feature-card__desc">Sweeps the full tilt × azimuth grid and renders an interactive heatmap showing the annual yield for every orientation. Instantly highlights the global optimum.</p>
+        </div>
+
+        <div class="feature-card" data-reveal>
+          <div class="feature-card__icon feature-card__icon--blue" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B5FA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <h3 class="feature-card__title">Full Loss Waterfall</h3>
+          <p class="feature-card__desc">Configurable DC/AC loss chain: soiling, LID, mismatch, DC wiring, availability, AC wiring, and transformer. Visualized as a horizontal waterfall chart per IEC 61724.</p>
+        </div>
+
+        <div class="feature-card" data-reveal>
+          <div class="feature-card__icon feature-card__icon--green" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <h3 class="feature-card__title">CSV / JSON Export</h3>
+          <p class="feature-card__desc">Download monthly yield tables as CSV and the full simulation summary — parameters, results, loss waterfall, and data source — as machine-readable JSON.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- PHYSICS TABLE                                                      -->
+  <!-- ================================================================== -->
+  <section class="physics" aria-labelledby="physics-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" id="physics-heading">Physics Stack</h2>
+        <p class="section-lead">Every simulation stage uses industry-standard models, equivalent to PVsyst and SAM.</p>
+      </div>
+
+      <div class="physics__table-wrap">
+        <table class="physics__table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Model</th>
+              <th>pvlib function</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Climate data</td>
+              <td>PVGIS TMY (20+ yr satellite)</td>
+              <td><code>pvlib.iotools.get_pvgis_tmy()</code></td>
+            </tr>
+            <tr>
+              <td>Solar position</td>
+              <td>Ephemeris algorithm</td>
+              <td><code>location.get_solarposition()</code></td>
+            </tr>
+            <tr>
+              <td>Sky diffuse</td>
+              <td>Perez anisotropic sky model</td>
+              <td><code>irradiance.get_total_irradiance(model='perez')</code></td>
+            </tr>
+            <tr>
+              <td>IAM</td>
+              <td>Physical (AR glass coating)</td>
+              <td><code>pvlib.iam.physical()</code></td>
+            </tr>
+            <tr>
+              <td>Cell temperature</td>
+              <td>Faiman (PVsyst default)</td>
+              <td><code>pvlib.temperature.faiman()</code></td>
+            </tr>
+            <tr>
+              <td>Electrical model</td>
+              <td>PVsyst one-diode SDM</td>
+              <td><code>calcparams_pvsyst() + singlediode()</code></td>
+            </tr>
+            <tr>
+              <td>Inverter</td>
+              <td>CEC Sandia / PVWatts</td>
+              <td><code>pvlib.inverter.sandia() / pvwatts()</code></td>
+            </tr>
+            <tr>
+              <td>Performance ratio</td>
+              <td>IEC 61724 (vs POA)</td>
+              <td><code>E_AC / (H_poa × P_peak)</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- APP EMBED / LAUNCH                                                 -->
+  <!-- ================================================================== -->
+  <section class="app-embed" id="launch" aria-labelledby="launch-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" id="launch-heading">Run Solar Advisor</h2>
+        <p class="section-lead">The app runs locally with a single command. Click below to launch it in this window, or open it in a dedicated browser tab.</p>
+      </div>
+
+      <div class="embed-intro">
+        <div>
+          <ol class="embed-steps">
+            <li>
+              <div>
+                <strong>Clone the repository</strong>
+                <span>Get the source code from GitHub in one line.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Create the conda environment</strong>
+                <span>All dependencies are pinned in <code>solar-app/requirements.txt</code>.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Launch the app</strong>
+                <span>Streamlit starts a local server and opens your browser automatically.</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div>
+          <div class="embed-shell">
+            <div class="embed-shell__header">bash &mdash; terminal</div>
+            <div class="embed-shell__code"><span class="c"># 1. Clone</span>
+git clone https://github.com/rgutzen/solarflower-app.git
+cd solarflower-app
+
+<span class="c"># 2. Create environment (conda / mamba)</span>
+conda create -n app-dev python=3.12
+conda activate app-dev
+pip install -r solar-app/requirements.txt
+
+<span class="c"># 3. Launch</span>
+cd solar-app
+streamlit run app.py</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iframe embed -->
+      <!--
+        UPDATE APP_URL after deploying to Streamlit Community Cloud.
+        See solar-app/docs/deployment.md for full instructions.
+        Change: const APP_URL = 'http://localhost:8501';
+        To:     const APP_URL = 'https://YOUR-APP.streamlit.app';
+        Also update the href and display URL in the bar below.
+      -->
+      <div class="embed-frame-wrap" id="embed-wrap">
+        <div class="embed-frame__bar">
+          <span class="embed-frame__dot embed-frame__dot--r" aria-hidden="true"></span>
+          <span class="embed-frame__dot embed-frame__dot--a" aria-hidden="true"></span>
+          <span class="embed-frame__dot embed-frame__dot--g" aria-hidden="true"></span>
+          <!-- UPDATE THIS after cloud deploy: -->
+          <span class="embed-frame__url" id="frame-url">localhost:8501</span>
+          <!-- UPDATE href after cloud deploy: -->
+          <a href="http://localhost:8501" target="_blank" rel="noopener noreferrer" class="embed-frame__new-tab" id="open-new-tab" aria-label="Open Solar Advisor in new tab">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 2h4v4M14 2L8 8M7 4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Open in new tab
+          </a>
+        </div>
+
+        <!-- Click-to-launch placeholder -->
+        <div class="embed-placeholder" id="embed-placeholder" role="button" tabindex="0" aria-label="Click to launch Solar Advisor">
+          <div class="embed-placeholder__icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div class="embed-placeholder__text">
+            <strong id="placeholder-title">Click to launch Solar Advisor</strong>
+            <span id="placeholder-hint">Loads from localhost:8501 &mdash; start the app first</span>
+          </div>
+        </div>
+
+        <!-- iframe (shown after click) -->
+        <div class="embed-iframe-container" id="embed-iframe-container">
+          <iframe id="solar-iframe" src="" title="Solar Advisor application" allow="fullscreen"></iframe>
+        </div>
+
+        <!-- Fallback (shown if iframe fails to load or is blocked by X-Frame-Options) -->
+        <div class="embed-fallback" id="embed-fallback" role="alert">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p id="fallback-msg">Could not load Solar Advisor in this frame.</p>
+          <p id="fallback-hint">The app may be sleeping (first load takes ~30 s) or blocking iframes.</p>
+          <a id="fallback-link" href="http://localhost:8501" target="_blank" rel="noopener noreferrer"
+             style="margin-top:8px; padding:8px 20px; background:#F5A623; color:#1a1a2e; font-weight:700; border-radius:6px; font-size:0.875rem; text-decoration:none;">
+            Open Solar Advisor in new tab
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- CTA BANNER                                                         -->
+  <!-- ================================================================== -->
+  <section class="cta-banner" aria-labelledby="cta-heading">
+    <div class="container">
+      <h2 id="cta-heading">Open source &amp; self-hosted</h2>
+      <p>
+        Solar Advisor is released under AGPL-3.0. Run it on your own server, fork it, extend it, or contribute back.
+        Commercial licensing available for proprietary deployments.
+      </p>
+      <div class="cta-banner__actions">
+        <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+        <a href="mailto:robin.gutzen@outlook.com?subject=Solarflower%20Commercial%20License" class="btn btn--outline" style="--btn-outline-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.8);">
+          Contact for Licensing
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                             -->
+  <!-- ================================================================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
+        <span>Solarflower</span>
+      </div>
+      <p class="footer__copy">&copy; 2025 Robin Gutzen &middot; <a href="https://github.com/rgutzen/solarflower-app/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0-or-later</a></p>
+      <div class="footer__links">
+        <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="mailto:robin.gutzen@outlook.com" aria-label="Email Robin Gutzen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+  <script>
+    // ---- iframe launch logic ----
+    // UPDATE APP_URL after deploying to Streamlit Community Cloud.
+    // See solar-app/docs/deployment.md for instructions.
+    const APP_URL = 'http://localhost:8501';
+    const IS_CLOUD = APP_URL.includes('streamlit.app');
+
+    const placeholder    = document.getElementById('embed-placeholder');
+    const iframeContainer = document.getElementById('embed-iframe-container');
+    const fallback       = document.getElementById('embed-fallback');
+    const iframe         = document.getElementById('solar-iframe');
+
+    // Adapt text to local vs. cloud context
+    if (IS_CLOUD) {
+      document.getElementById('placeholder-hint').textContent =
+        'Hosted on Streamlit Cloud — may take ~30 s on first load';
+      document.getElementById('fallback-msg').textContent =
+        'Could not embed Solar Advisor in this frame.';
+      document.getElementById('fallback-hint').textContent =
+        'The app may be sleeping or blocking iframes. Open it directly:';
+    } else {
+      document.getElementById('fallback-msg').textContent =
+        'Solar Advisor is not running locally.';
+      document.getElementById('fallback-hint').innerHTML =
+        'Start it with: <code style="color:#a6e3a1;background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;">' +
+        'cd solar-app &amp;&amp; streamlit run app.py</code>';
+    }
+    document.getElementById('fallback-link').href = APP_URL;
+
+    let launched = false;
+
+    function launchApp() {
+      if (launched) return;
+      launched = true;
+
+      placeholder.style.display = 'none';
+      iframeContainer.style.display = 'block';
+      iframe.src = APP_URL;
+
+      // Cloud apps may take up to 30 s to wake from sleep
+      const timeout = IS_CLOUD ? 40000 : 12000;
+      let loadTimeout = setTimeout(() => {
+        iframeContainer.style.display = 'none';
+        fallback.style.display = 'flex';
+      }, timeout);
+
+      iframe.addEventListener('load', () => {
+        clearTimeout(loadTimeout);
+        // A successful load fires here; X-Frame-Options blocks fire silently,
+        // leaving the iframe blank — the timeout above handles that case.
+      }, { once: true });
+
+      iframe.addEventListener('error', () => {
+        clearTimeout(loadTimeout);
+        iframeContainer.style.display = 'none';
+        fallback.style.display = 'flex';
+      }, { once: true });
+    }
+
+    placeholder.addEventListener('click', launchApp);
+    placeholder.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); launchApp(); }
+    });
+
+    // Auto-launch if page loaded with #launch hash (e.g. from index.html deep link)
+    if (window.location.hash === '#launch') {
+      window.addEventListener('load', () => setTimeout(launchApp, 300));
+    }
+  </script>
+</body>
+</html>
