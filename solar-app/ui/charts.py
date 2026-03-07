@@ -23,10 +23,26 @@ RED_COLOR  = "#E63946"
 # Tab 1: Annual Summary — Loss Waterfall
 # ---------------------------------------------------------------------------
 
+_WATERFALL_LABELS = {
+    "Horizon & far shading": "Orientation losses",
+    "IAM (angle of incidence)": "Glass reflections",
+    "Temperature derating": "Heat derating",
+    "Soiling": "Soiling (dust & dirt)",
+    "LID": "First-year aging (LID)",
+    "Mismatch": "Panel mismatch",
+    "DC wiring": "DC cable losses",
+    "Inverter": "Inverter conversion",
+    "Availability": "Downtime",
+    "AC wiring": "AC cable losses",
+    "Transformer": "Transformer",
+}
+
+
 def loss_waterfall(waterfall: dict[str, float], net_kwh: float) -> go.Figure:
     """Horizontal waterfall chart showing the loss chain from gross ETR to net yield."""
-    labels = list(waterfall.keys()) + ["Net yield"]
-    losses = list(waterfall.values())
+    friendly = {_WATERFALL_LABELS.get(k, k): v for k, v in waterfall.items()}
+    labels = list(friendly.keys()) + ["Net AC yield"]
+    losses = list(friendly.values())
     values = [-v for v in losses] + [net_kwh]
 
     gross = net_kwh + sum(losses)
@@ -57,13 +73,14 @@ def loss_waterfall(waterfall: dict[str, float], net_kwh: float) -> go.Figure:
         insidetextanchor="middle",
     ))
     fig.add_vline(x=gross, line_dash="dash", line_color=GREY_COLOR,
-                  annotation_text=f"Gross {gross:.0f} kWh", annotation_position="top")
+                  annotation_text=f"Gross solar input {gross:.0f} kWh",
+                  annotation_position="top")
     fig.update_layout(
-        title="Annual Energy Loss Waterfall",
-        xaxis_title="Energy [kWh/yr]",
+        title="Where does the energy go? — Annual loss chain",
+        xaxis_title="Energy [kWh/year]",
         yaxis=dict(autorange="reversed"),
         height=420,
-        margin=dict(l=160, r=20, t=50, b=40),
+        margin=dict(l=180, r=20, t=50, b=40),
         showlegend=False,
     )
     return fig
@@ -102,7 +119,7 @@ def monthly_summary(
     ), secondary_y=True)
 
     fig.update_layout(
-        title="Monthly Breakdown",
+        title="Monthly yield — average kWh generated per day",
         xaxis=dict(tickmode="array", tickvals=x, ticktext=MONTH_LABELS),
         height=350, margin=dict(l=60, r=60, t=50, b=40),
         legend=dict(orientation="h", y=1.1),
@@ -159,9 +176,9 @@ def orientation_heatmap(
     ))
 
     fig.update_layout(
-        title=f"Annual Yield by Orientation (optimal: tilt={opt_tilt}°, az={opt_az}°, {opt_val:.0f} kWh/yr)",
-        xaxis_title="Panel azimuth [°]  (0=N, 90=E, 180=S, 270=W)",
-        yaxis_title="Panel tilt [°]",
+        title=f"Annual yield by orientation — best: tilt {opt_tilt}°, facing {opt_az}° → {opt_val:,.0f} kWh/yr",
+        xaxis_title="Facing direction [°]  (0° = North · 90° = East · 180° = South · 270° = West)",
+        yaxis_title="Tilt angle [°]  (0° = flat · 90° = vertical)",
         height=420,
         margin=dict(l=60, r=20, t=60, b=50),
         legend=dict(orientation="h", y=1.1),
@@ -200,8 +217,9 @@ def yield_vs_tilt(
         name="Current", showlegend=True,
     ))
     fig.update_layout(
-        title="Yield vs Tilt",
-        xaxis_title="Tilt [°]", yaxis_title="Annual yield [kWh/yr]",
+        title="How tilt angle affects annual yield",
+        xaxis_title="Tilt angle [°]  (0° = flat · 90° = vertical)",
+        yaxis_title="Annual yield [kWh/yr]",
         height=300, margin=dict(l=60, r=20, t=50, b=50),
         legend=dict(orientation="h", y=1.1),
     )
@@ -273,13 +291,13 @@ def daily_irradiance(
     import datetime
     date_str = (datetime.date(2023, 1, 1) + datetime.timedelta(days=doy - 1)).strftime("%B %d")
     fig.update_layout(
-        title=f"Hourly POA Irradiance — {date_str}",
-        xaxis_title="Hour (UTC)", height=360,
+        title=f"Solar energy on your panel surface — {date_str}",
+        xaxis_title="Hour of day (UTC)", height=360,
         margin=dict(l=60, r=60, t=50, b=50),
         legend=dict(orientation="h", y=1.12),
     )
-    fig.update_yaxes(title_text="POA irradiance [W/m²]", secondary_y=False)
-    fig.update_yaxes(title_text="Solar altitude [°]", secondary_y=True, range=[0, 90])
+    fig.update_yaxes(title_text="Solar power on panel [W/m²]", secondary_y=False)
+    fig.update_yaxes(title_text="Sun height above horizon [°]", secondary_y=True, range=[0, 90])
     return fig
 
 
@@ -327,7 +345,7 @@ def sun_path_polar(lat: float, lon: float, elevation_m: float, selected_doy: int
         ))
 
     fig.update_layout(
-        title="Sun Path Diagram",
+        title="Sun path across the sky — centre = directly overhead, edge = horizon",
         polar=dict(
             angularaxis=dict(
                 tickmode="array",

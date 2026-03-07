@@ -34,17 +34,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.markdown("""
-<style>
-    .metric-box {
-        background: #1e1e2e; border-radius: 8px; padding: 12px 16px;
-        text-align: center; border: 1px solid #333;
-    }
-    .metric-value { font-size: 1.6rem; font-weight: 700; color: #F5A623; }
-    .metric-label { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
-</style>
-""", unsafe_allow_html=True)
-
 # ---------------------------------------------------------------------------
 # Load databases (cached across all sessions)
 # ---------------------------------------------------------------------------
@@ -65,7 +54,7 @@ if "tmy_df" not in st.session_state:
     st.session_state["data_source"] = ""
 
 if cfg["fetch_climate"] or st.session_state["tmy_df"] is None:
-    with st.spinner("Fetching PVGIS TMY data… (may take a few seconds)"):
+    with st.spinner("Fetching climate data… (may take a few seconds)"):
         try:
             tmy_df, source = fetch_tmy(cfg["lat"], cfg["lon"])
             st.session_state["tmy_df"] = tmy_df
@@ -74,7 +63,7 @@ if cfg["fetch_climate"] or st.session_state["tmy_df"] is None:
             st.error(f"Climate data fetch failed: {e}")
             st.stop()
 
-tmy_df     = st.session_state["tmy_df"]
+tmy_df      = st.session_state["tmy_df"]
 data_source = st.session_state["data_source"]
 
 # ---------------------------------------------------------------------------
@@ -100,26 +89,94 @@ with st.spinner("Running simulation…"):
     )
 
 # ---------------------------------------------------------------------------
-# Persistent summary metrics bar
+# Data source badge
+# ---------------------------------------------------------------------------
+st.caption(f"☁ Climate data: {data_source}")
+
+# ---------------------------------------------------------------------------
+# Summary metrics bar (st.metric supports hover tooltips via help=)
 # ---------------------------------------------------------------------------
 st.markdown("---")
 pk_kw = result.peak_power_kw
 cols = st.columns(7)
-metrics = [
-    ("DC Peak",       f"{pk_kw:.1f} kWp"),
-    ("Annual Yield",  f"{result.annual_yield_kwh:,.0f} kWh"),
-    ("Specific Yield",f"{result.specific_yield_kwh_kwp:,.0f} kWh/kWp"),
-    ("Perf. Ratio",   f"{result.performance_ratio * 100:.1f}%"),
-    ("Cap. Factor",   f"{result.capacity_factor * 100:.1f}%"),
-    ("Avg Daily",     f"{result.annual_yield_kwh / 365:.1f} kWh/day"),
-    ("Data Source",   data_source.split(",")[0]),
-]
-for col, (label, value) in zip(cols, metrics):
-    col.markdown(
-        f'<div class="metric-box"><div class="metric-value">{value}</div>'
-        f'<div class="metric-label">{label}</div></div>',
-        unsafe_allow_html=True,
+
+with cols[0]:
+    st.metric(
+        "DC Peak Power",
+        f"{pk_kw:.1f} kWp",
+        help=(
+            "The rated maximum power of the whole solar array under ideal lab conditions "
+            "(1,000 W/m² sunlight, 25°C cell temperature). "
+            "'kWp' = kilowatt-peak. A typical home system is 4–12 kWp."
+        ),
     )
+with cols[1]:
+    st.metric(
+        "Annual Yield",
+        f"{result.annual_yield_kwh:,.0f} kWh",
+        help=(
+            "Total electrical energy the system is estimated to generate in one year, "
+            "after all losses. "
+            "A typical European household uses ~3,500 kWh/year."
+        ),
+    )
+with cols[2]:
+    st.metric(
+        "Specific Yield",
+        f"{result.specific_yield_kwh_kwp:,.0f} kWh/kWp",
+        help=(
+            "Annual yield per kilowatt of installed capacity — useful for "
+            "comparing locations or system designs fairly. "
+            "Typical values: Central Europe 900–1,100 · Mediterranean 1,300–1,600 · "
+            "Desert / tropics 1,600–2,200 kWh/kWp."
+        ),
+    )
+with cols[3]:
+    st.metric(
+        "Performance Ratio",
+        f"{result.performance_ratio * 100:.1f}%",
+        help=(
+            "How efficiently the system converts available sunlight on the panel surface "
+            "into electricity at the meter, expressed as a percentage. "
+            "Accounts for all real-world losses (heat, wiring, inverter, soiling…). "
+            "A well-designed system achieves 75–90%. Higher is better."
+        ),
+    )
+with cols[4]:
+    st.metric(
+        "Capacity Factor",
+        f"{result.capacity_factor * 100:.1f}%",
+        help=(
+            "The fraction of the theoretical maximum output achieved if the system ran "
+            "at full rated power for every hour of the year. "
+            "Solar panels in Europe typically reach 10–18%."
+        ),
+    )
+with cols[5]:
+    st.metric(
+        "Avg Daily Yield",
+        f"{result.annual_yield_kwh / 365:.1f} kWh/day",
+        help=(
+            "Average energy generated per day over the whole year. "
+            "Summer days produce several times more than winter days — "
+            "see the Monthly Breakdown tab for detail."
+        ),
+    )
+with cols[6]:
+    source_short = data_source.split(",")[0]
+    st.metric(
+        "Data Source",
+        source_short,
+        help=(
+            "Where the weather data for this simulation came from.\n\n"
+            "**PVGIS TMY** — 20+ year satellite average from the EU Joint Research Centre. "
+            "Most accurate.\n\n"
+            "**Open-Meteo** — ERA5 reanalysis data (fallback if PVGIS is unavailable).\n\n"
+            "**Clear-sky model** — offline fallback; assumes no clouds. "
+            "Likely to overestimate yield."
+        ),
+    )
+
 st.markdown("---")
 
 # ---------------------------------------------------------------------------
@@ -135,6 +192,11 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 
 # ---- Tab 1: Annual Summary ------------------------------------------------
 with tab1:
+    st.caption(
+        "The **loss waterfall** (left) shows where energy is lost between raw sunlight "
+        "and your household socket. The **monthly chart** (right) shows how yield "
+        "and efficiency vary through the seasons."
+    )
     col_wf, col_monthly = st.columns([1, 1])
     with col_wf:
         st.plotly_chart(
@@ -147,22 +209,25 @@ with tab1:
             use_container_width=True,
         )
 
-    # Loss budget table
     with st.expander("Loss Budget Detail"):
+        st.caption(
+            "Each row shows one loss category — what percentage it is and how many "
+            "kWh/year it costs. Adjust the **Real-world Losses** section in the sidebar "
+            "to explore different scenarios."
+        )
         losses_dict = cfg["loss_budget"].as_dict()
         loss_df = pd.DataFrame({
-            "Loss Category": list(losses_dict.keys()),
+            "Loss category": list(losses_dict.keys()),
             "Loss [%]": [f"{v*100:.2f}%" for v in losses_dict.values()],
-            "Energy Lost [kWh/yr]": [
+            "Energy lost [kWh/yr]": [
                 f"{result.loss_waterfall.get(k, 0):.0f}"
                 for k in losses_dict.keys()
             ],
         })
         st.dataframe(loss_df, use_container_width=True, hide_index=True)
 
-    # Export
     with st.expander("Download Results"):
-        import io, json
+        import json
 
         monthly_export_df = pd.DataFrame({
             "Month": ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
@@ -219,12 +284,18 @@ with tab1:
 
 # ---- Tab 2: Orientation Optimizer -----------------------------------------
 with tab2:
+    st.caption(
+        "Sweeps every combination of tilt angle and facing direction to find which "
+        "orientation produces the most energy at your location. "
+        "The ⭐ marks the global best; the ✕ marks your current selection in the sidebar."
+    )
+
     tilt_arr = np.arange(0, 91, cfg["tilt_step"])
     az_arr   = np.arange(0, 360, cfg["az_step"])
 
-    run_sweep = st.button("Run Orientation Sweep", type="primary", use_container_width=False)
+    run_sweep = st.button("Run Orientation Sweep", type="primary")
     if run_sweep or "energy_grid" not in st.session_state:
-        with st.spinner(f"Computing {len(tilt_arr) * len(az_arr)} orientations…"):
+        with st.spinner(f"Testing {len(tilt_arr) * len(az_arr)} orientations — this may take a minute…"):
             energy_grid = compute_orientation_grid(
                 tmy_df=tmy_df,
                 lat=cfg["lat"],
@@ -263,15 +334,33 @@ with tab2:
             )
         with col_b:
             delta = opt_kwh - result.annual_yield_kwh
-            st.metric("Optimal orientation",
-                      f"Tilt {opt_tilt:.0f}°, Az {opt_az:.0f}°",
-                      f"+{delta:.0f} kWh/yr vs selected" if delta > 0 else f"{delta:.0f} kWh/yr")
-            st.metric("Optimal annual yield", f"{opt_kwh:,.0f} kWh/yr")
-            st.metric("Your selection", f"{result.annual_yield_kwh:,.0f} kWh/yr",
-                      f"Tilt {cfg['tilt_deg']}°, Az {cfg['panel_az_deg']}°")
+            st.metric(
+                "Best orientation found",
+                f"Tilt {opt_tilt:.0f}°, facing {opt_az:.0f}°",
+                delta=f"+{delta:.0f} kWh/yr vs your selection" if delta > 0 else "already optimal",
+                help="The tilt and facing direction that maximise annual yield at this location.",
+            )
+            st.metric("Best annual yield", f"{opt_kwh:,.0f} kWh/yr")
+            st.metric(
+                "Your current selection",
+                f"{result.annual_yield_kwh:,.0f} kWh/yr",
+                delta=f"Tilt {cfg['tilt_deg']}°, facing {cfg['panel_az_deg']}°",
+            )
+            if delta > 10:
+                st.info(
+                    f"💡 You could gain **{delta:.0f} kWh/yr** "
+                    f"by adjusting to tilt **{opt_tilt:.0f}°**, "
+                    f"facing **{opt_az:.0f}°**. "
+                    "Update the sliders in the **Panel Orientation** section of the sidebar."
+                )
 
 # ---- Tab 3: Monthly Breakdown ---------------------------------------------
 with tab3:
+    st.caption(
+        "Average energy generated per day in each month. "
+        "The line shows the **Performance Ratio** — how efficiently the system runs "
+        "month by month (lower in summer due to higher panel temperatures)."
+    )
     show_optimal = st.checkbox("Compare with optimal orientation", value=True)
 
     monthly_opt = None
@@ -295,6 +384,11 @@ with tab3:
                 albedo=cfg["albedo"],
             )
             monthly_opt = opt_result.monthly_yield_kwh_day
+    elif show_optimal:
+        st.info(
+            "Run the **Orientation Sweep** in the Orientation Optimizer tab first "
+            "to enable the comparison overlay."
+        )
 
     st.plotly_chart(
         charts.monthly_summary(result.monthly_yield_kwh_day, result.monthly_pr, monthly_opt),
@@ -312,14 +406,25 @@ with tab3:
 
 # ---- Tab 4: Daily Irradiance ----------------------------------------------
 with tab4:
+    st.caption(
+        "Hourly solar energy reaching your panel surface on a single day. "
+        "**Direct beam** (amber) is from direct sunlight. "
+        "**Sky diffuse** (blue) comes from the bright sky — still useful on cloudy days. "
+        "**Ground reflected** (green) bounces off the ground in front of tilted panels."
+    )
     import datetime
     doy = st.slider(
-        "Day of year", 1, 365, 172,
+        "Day of year",
+        1, 365, 172,
         format="%d",
-        help="172 = June 21 (summer solstice N hemisphere)",
+        help=(
+            "Drag to explore different times of year. "
+            "Day 1 = Jan 1  ·  Day 172 = Jun 21 (summer solstice, N hemisphere)  ·  "
+            "Day 355 = Dec 21 (winter solstice, N hemisphere)"
+        ),
     )
     date_label = (datetime.date(2023, 1, 1) + datetime.timedelta(days=doy - 1)).strftime("%B %d")
-    st.caption(f"Selected: **{date_label}**")
+    st.caption(f"Showing: **{date_label}** (day {doy})")
 
     st.plotly_chart(
         charts.daily_irradiance(
@@ -331,12 +436,25 @@ with tab4:
 
 # ---- Tab 5: Sun Path ------------------------------------------------------
 with tab5:
-    doy_sp = st.slider("Selected day", 1, 365, 172, key="doy_sp")
+    st.caption(
+        "The sun's arc across the sky for key dates of the year. "
+        "The **centre** of the diagram is directly overhead. "
+        "The **outer ring** is the horizon (sun rising or setting). "
+        "Compass directions are shown around the edge. "
+        "The arc shifts with the seasons — higher and longer in summer, "
+        "lower and shorter in winter."
+    )
+    doy_sp = st.slider(
+        "Selected day",
+        1, 365, 172,
+        key="doy_sp",
+        help=(
+            "Day 172 = June 21 (summer solstice)  ·  "
+            "Day 355 = December 21 (winter solstice)  ·  "
+            "Day 79 = March 20 (spring equinox)"
+        ),
+    )
     st.plotly_chart(
         charts.sun_path_polar(cfg["lat"], cfg["lon"], cfg["elevation_m"], doy_sp),
         use_container_width=True,
-    )
-    st.caption(
-        "Polar plot: center = zenith (sun directly overhead). "
-        "Distance from center = zenith angle. Horizon = outer ring."
     )
