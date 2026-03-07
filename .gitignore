@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Streamlit
+.streamlit/
+
+# Data / cache (fetched climate data — can be large and is re-fetched on demand)
+solar-app/.cache/
+solar-app/cache/
+*.h5
+*.hdf5
+*.parquet
+
+# PVsyst component files (may contain proprietary manufacturer data)
+*.pan
+*.ond
+*.vc0
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / credentials
+.env.local
+secrets.toml
+.streamlit/secrets.toml
