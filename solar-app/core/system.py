@@ -24,13 +24,13 @@ import streamlit as st
 @st.cache_resource
 def load_cec_modules() -> pd.DataFrame:
     """Load pvlib's bundled CEC module database (~15 000 modules)."""
-    return pvlib.retrieve_sam("cecmod")
+    return pvlib.pvsystem.retrieve_sam("cecmod")
 
 
 @st.cache_resource
 def load_cec_inverters() -> pd.DataFrame:
     """Load pvlib's bundled CEC inverter database (~3 000 inverters)."""
-    return pvlib.retrieve_sam("cecinverter")
+    return pvlib.pvsystem.retrieve_sam("cecinverter")
 
 
 def search_modules(query: str, db: pd.DataFrame, n: int = 50) -> list[str]:
