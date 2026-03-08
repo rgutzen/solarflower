@@ -4,7 +4,7 @@ _Update this file after every working session._
 _Last updated: 2026-03-06_
 
 ## Scope
-- **Directory:** `/home/rgutzen/01_PROJECTS/solarflower-app/mobile-app/`
+- **Directory:** `/home/rgutzen/01_PROJECTS/solarflower/mobile-app/`
 - **Base prompt:** `.claude/agent-prompts/04_mobile-app.md`
 - **Do NOT modify:** any file outside `mobile-app/`
 

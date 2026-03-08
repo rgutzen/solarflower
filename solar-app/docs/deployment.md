@@ -7,7 +7,7 @@ The entire deployment takes about 10 minutes.
 
 ## Prerequisites
 
-- A GitHub account with access to `github.com/rgutzen/solarflower-app`
+- A GitHub account with access to `github.com/rgutzen/solarflower`
 - The repo must be **public** (it is — AGPL-3.0 open source)
 - A Streamlit Cloud account at [streamlit.io/cloud](https://streamlit.io/cloud)
   (sign in with your GitHub account — no separate sign-up needed)
@@ -19,7 +19,7 @@ The entire deployment takes about 10 minutes.
 Make sure all local changes are committed and pushed:
 
 ```bash
-cd /home/rgutzen/01_PROJECTS/solarflower-app
+cd /home/rgutzen/01_PROJECTS/solarflower
 git add -A
 git commit -m "Add Streamlit Cloud config and deployment guide"
 git push origin main
@@ -42,7 +42,7 @@ git ls-files solar-app/.streamlit/
 
    | Field | Value |
    |-------|-------|
-   | Repository | `rgutzen/solarflower-app` |
+   | Repository | `rgutzen/solarflower` |
    | Branch | `main` |
    | Main file path | `solar-app/app.py` |
    | App URL (optional) | `solarflower` → becomes `solarflower.streamlit.app` |
@@ -61,7 +61,7 @@ Subsequent redeploys are faster.
 
 After deployment, your app URL will be one of:
 - `https://solarflower.streamlit.app` (if the short name was available)
-- `https://rgutzen-solarflower-app-solar-app-app-XXXX.streamlit.app` (auto-generated)
+- `https://rgutzen-solarflower-solar-app-app-XXXX.streamlit.app` (auto-generated)
 
 You can find and copy it from the Streamlit Cloud dashboard.
 

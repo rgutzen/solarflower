@@ -34,7 +34,7 @@
 - [x] `LICENSE` — AGPL-3.0-or-later (downloaded from gnu.org)
 - [x] `COMMERCIAL_LICENSE.md` — dual licensing terms + contact info
 - [x] `solar-app/README.md` — quick start, physics stack, project structure
-- [x] Initial git commit (43a9ca3) and push to `git@github.com:rgutzen/solarflower-app.git`
+- [x] Initial git commit (43a9ca3) and push to `git@github.com:rgutzen/solarflower.git`
 
 ## Session: Streamlit Cloud deployment prep (2026-03-07)
 

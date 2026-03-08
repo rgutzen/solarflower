@@ -4,7 +4,7 @@ _Update this file after every working session._
 _Last updated: 2026-03-06_
 
 ## Scope
-- **File:** `/home/rgutzen/01_PROJECTS/solarflower-app/notebook/solar_panel_power.ipynb`
+- **File:** `/home/rgutzen/01_PROJECTS/solarflower/notebook/solar_panel_power.ipynb`
 - **Base prompt:** `.claude/agents/01-notebook/01_scicomm-notebook.md`
 - **Do NOT modify:** any file outside the notebook
 

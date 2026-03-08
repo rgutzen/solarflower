@@ -25,6 +25,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .oa-tip{position:relative;color:#2E7D32;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:rgba(46,125,50,.4);text-underline-offset:3px;cursor:pointer;transition:color .25s ease}
+    .oa-tip:hover{color:#F5A623;text-decoration-color:#F5A623}
+    .oa-tip::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);padding:6px 14px;background:#1E3A2F;color:#fff;font-size:.78rem;font-weight:500;line-height:1.4;white-space:nowrap;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:10}
+    .oa-tip::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1E3A2F;opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:10}
+    .oa-tip:hover::after,.oa-tip:hover::before{opacity:1}
+    @media(max-width:600px){.oa-tip::after{white-space:normal;width:200px;text-align:center}}
+  </style>
 </head>
 <body>
 
@@ -85,7 +93,7 @@
           </a>
         </li>
         <li>
-          <a href="#" class="nav__comp nav__comp--compass" aria-disabled="true" tabindex="-1">
+          <a href="mobile-app/" class="nav__comp nav__comp--compass">
             <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><use href="#sf-compass"/></svg>
             <span>Panel Compass</span>
           </a>
@@ -169,7 +177,7 @@
         <div class="section-header">
           <p class="section-lead">
           Most panels sit on roofs that weren't designed for solar — and orientation matters more than people think.
-          For a south-facing panel, a suboptimal tilt usually costs only about 3% of its yield, but deviations to the east or west can easily push that loss to 25%, adding <strong>one to two extra years of payback time</strong> at typical European latitudes.
+          For a south-facing panel, a suboptimal tilt usually costs only about 3% of its yield, but deviations to the east or west can easily push that loss to 25%, adding <a class="oa-tip" href="orientation-analysis.html" data-tooltip="Read the full orientation analysis — 5 latitudes, 1 368 orientations each"><strong>one to two extra years of payback time</strong></a> at typical European latitudes.
           Near the equator the effect almost vanishes; at high latitudes it intensifies.
           Understanding these trade-offs before installation turns a guess into a confident decision. That's what Solarflower is built for.
           </p>

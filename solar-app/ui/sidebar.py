@@ -606,7 +606,7 @@ def _geocode(query: str) -> tuple[float, float, str] | None:
         resp = requests.get(
             "https://nominatim.openstreetmap.org/search",
             params={"q": query, "format": "json", "limit": 1},
-            headers={"User-Agent": "SolarAdvisor/1.0 (github.com/rgutzen/solarflower-app)"},
+            headers={"User-Agent": "SolarAdvisor/1.0 (github.com/rgutzen/solarflower)"},
             timeout=8,
         )
         resp.raise_for_status()

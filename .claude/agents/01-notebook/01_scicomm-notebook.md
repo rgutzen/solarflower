@@ -29,7 +29,7 @@ The Solarflower project has four components. You work on component 1:
 3. **Website** (`website/`) — landing page linking all components
 4. **Mobile-App** (`mobile-app/`) — on-site panel orientation helper
 
-**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower-app/`
+**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower/`
 **License:** AGPL-3.0-or-later (see `LICENSE`)
 **Run environment:** `app-dev` conda env at `/home/rgutzen/miniforge3/envs/app-dev/`
 

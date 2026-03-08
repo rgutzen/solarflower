@@ -1,0 +1,357 @@
+/* SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* ===================================================================
+   Solarflower — Orientation Analysis Page Styles
+   =================================================================== */
+
+/* ----- Optimal orientation cards ----- */
+.oa__optimal-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-3);
+  margin: var(--sp-6) 0 var(--sp-3);
+}
+
+.oa__optimal-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: var(--sp-4) var(--sp-3);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(76, 175, 80, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.oa__optimal-city {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.oa__optimal-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--amber-dark);
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+.oa__optimal-yield {
+  font-size: 0.78rem;
+  color: var(--grey);
+  font-family: var(--font-mono);
+}
+
+/* ----- Figures ----- */
+.oa__figure {
+  margin: var(--sp-6) 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.oa__figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.oa__figure figcaption {
+  padding: var(--sp-3) var(--sp-5);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--grey);
+  border-top: 1px solid rgba(76, 175, 80, 0.06);
+  background: var(--grey-light);
+}
+
+.oa__figure--wide {
+  /* Allow wide figures to break out of the article column slightly */
+  margin-left: calc(-1 * var(--sp-6));
+  margin-right: calc(-1 * var(--sp-6));
+}
+
+/* ----- Captions for tables ----- */
+.oa__caption {
+  font-size: 0.85rem;
+  color: var(--grey);
+  margin-top: calc(-1 * var(--sp-2));
+  margin-bottom: var(--sp-4);
+  font-style: italic;
+}
+
+/* ----- Economic highlight cards ----- */
+.oa__econ-highlights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-4);
+  margin: var(--sp-6) 0;
+}
+
+.oa__econ-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: var(--sp-5) var(--sp-4);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(230, 57, 70, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.oa__econ-city {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--grey);
+}
+
+.oa__econ-label {
+  font-size: 0.82rem;
+  color: var(--ink-light);
+}
+
+.oa__econ-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+.oa__econ-value--loss {
+  color: var(--red);
+}
+
+.oa__econ-detail {
+  font-size: 0.78rem;
+  color: var(--grey);
+  font-family: var(--font-mono);
+}
+
+/* ----- Findings section ----- */
+.oa__findings {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-8);
+}
+
+.oa__finding-group h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--amber);
+  display: inline-block;
+}
+
+.oa__finding-group ul {
+  list-style: none;
+  padding: 0;
+}
+
+.oa__finding-group li {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink-light);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.06);
+}
+
+.oa__finding-group li:last-child {
+  border-bottom: none;
+}
+
+/* ----- Rules of thumb ----- */
+.oa__rules {
+  background: linear-gradient(135deg, var(--amber-light) 0%, #FFF8E7 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  border: 1px solid rgba(245, 166, 35, 0.15);
+}
+
+.oa__rules h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: var(--sp-4);
+}
+
+.oa__rules ol {
+  padding-left: var(--sp-6);
+  margin: 0;
+}
+
+.oa__rules li {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ink-light);
+  margin-bottom: var(--sp-3);
+}
+
+.oa__rules li:last-child {
+  margin-bottom: 0;
+}
+
+.oa__rules li strong {
+  color: var(--ink);
+}
+
+/* ----- Methodology grid ----- */
+.oa__method-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}
+
+.oa__method-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: var(--sp-5);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(76, 175, 80, 0.06);
+}
+
+.oa__method-card h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--green-dark);
+  margin-bottom: var(--sp-2);
+}
+
+.oa__method-card p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ink-light);
+  margin: 0;
+}
+
+.oa__method-card a {
+  color: var(--green-dark);
+  text-decoration: underline;
+  text-decoration-color: rgba(46, 125, 50, 0.3);
+  text-underline-offset: 2px;
+  transition: color var(--duration) var(--ease);
+}
+
+.oa__method-card a:hover {
+  color: var(--amber);
+  text-decoration-color: var(--amber);
+}
+
+/* ----- Reveal animation ----- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----- Tooltip link (for front page) ----- */
+.oa__tooltip-link {
+  position: relative;
+  color: var(--green-dark);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(46, 125, 50, 0.4);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color var(--duration) var(--ease);
+}
+
+.oa__tooltip-link:hover {
+  color: var(--amber);
+  text-decoration-color: var(--amber);
+}
+
+.oa__tooltip-link::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.oa__tooltip-link::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.oa__tooltip-link:hover::after,
+.oa__tooltip-link:hover::before {
+  opacity: 1;
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 960px) {
+  .oa__optimal-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .oa__econ-highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .oa__figure--wide {
+    margin-left: calc(-1 * var(--sp-3));
+    margin-right: calc(-1 * var(--sp-3));
+  }
+}
+
+@media (max-width: 600px) {
+  .oa__optimal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .oa__econ-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .oa__method-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .oa__tooltip-link::after {
+    white-space: normal;
+    width: 200px;
+    text-align: center;
+  }
+}

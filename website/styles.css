@@ -1214,7 +1214,8 @@ ul[role="list"] { list-style: none; }
 .nav__links .nav__comp--notebook:hover { background: rgba(139,82,48,0.12); color: #5A3015; }
 .nav__links .nav__comp--advisor  { color: #2D5A38; }
 .nav__links .nav__comp--advisor:hover  { background: rgba(74,122,88,0.12); color: #1A3522; }
-.nav__links .nav__comp--compass  { color: #7A5808; opacity: 0.55; cursor: default; pointer-events: none; }
+.nav__links .nav__comp--compass  { color: #7A5808; }
+.nav__links .nav__comp--compass:hover  { background: rgba(122,88,8,0.12); color: #5A4006; }
 
 /* Responsive — below 720px collapse to vertical stack */
 @media (max-width: 720px) {

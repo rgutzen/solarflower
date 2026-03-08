@@ -28,14 +28,14 @@ The Solarflower project has four components. You work on component 2:
 3. **Website** (`website/`) — landing page
 4. **Mobile-App** (`mobile-app/`) — on-site orientation helper
 
-**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower-app/`
+**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower/`
 **License:** AGPL-3.0-or-later (SPDX header on every Python file)
 **Run environment:** `app-dev` conda env at `/home/rgutzen/miniforge3/envs/app-dev/`
 
 ## Run Command
 
 ```bash
-cd /home/rgutzen/01_PROJECTS/solarflower-app/solar-app
+cd /home/rgutzen/01_PROJECTS/solarflower/solar-app
 /home/rgutzen/miniforge3/envs/app-dev/bin/streamlit run app.py
 ```
 Opens at `http://localhost:8501`

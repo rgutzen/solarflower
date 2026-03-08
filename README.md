@@ -10,7 +10,7 @@ Four open-source components covering the full learning and deployment journey:
 | 2 | [Solar Advisor](solar-app/) | Professional PV yield simulator (web app) | Complete |
 | 3 | [Website](website/) | Landing page linking all components | Complete |
 | 4 | [Solar Advisor API](api/) | REST API for mobile integration | Complete |
-| 5 | [Panel Compass](mobile-app/) | On-site orientation helper PWA | In progress |
+| 5 | [Panel Compass](mobile-app/) | On-site orientation helper PWA | Complete |
 
 ---
 
@@ -130,17 +130,35 @@ uvicorn main:app --reload
 
 ## Component 5 — Panel Compass (Mobile PWA)
 
-On-site orientation helper: real-time compass and tilt sensor guidance toward the
-optimal orientation for the user's GPS location. Calls the Solar Advisor API for yield estimates.
+On-site orientation helper PWA: place your phone face-up on the solar panel and get
+real-time compass + tilt guidance toward the optimal orientation for your GPS location.
 
-*In progress.*
+**Features:**
+- Live yield estimation from device sensors (compass heading → azimuth, accelerometer → tilt)
+- Circular yield gauge showing percentage of optimal output
+- Visual guidance: zone arcs (±3° green, ±10° amber) on compass and tilt meter
+- Directional arrows guiding toward optimal orientation
+- Automatic GPS geolocation with reverse geocoding
+- PVWatts-style yield model (GHI lookup × orientation factor × PR)
+- Installable PWA with offline support (service worker + cache)
+- Mobile-first design, no build step — plain HTML/CSS/JS
+
+**Run locally:**
+
+```bash
+cd mobile-app
+python -m http.server 8081
+# Opens at http://localhost:8081
+```
+
+No dependencies — vanilla JavaScript ES modules, no framework, no bundler.
 
 ---
 
 ## Repository Layout
 
 ```
-solarflower-app/
+solarflower/
 ├── notebook/              Component 1 — educational Jupyter notebook
 │   └── solar_panel_power.ipynb
 ├── solar-app/             Component 2 — Streamlit web app
@@ -166,7 +184,15 @@ solarflower-app/
 │   ├── requirements.txt
 │   ├── Procfile
 │   └── core/              climate.py + losses.py (no Streamlit deps)
-└── mobile-app/            Component 5 — Panel Compass PWA (in progress)
+└── mobile-app/            Component 5 — Panel Compass PWA
+    ├── index.html         Single-page app shell
+    ├── app.js             Main orchestrator (geolocation → sensors → yield → UI)
+    ├── solar.js           Pure JS solar calculations (yield, orientation factor)
+    ├── compass.js         Device sensor abstraction (compass + tilt + smoothing)
+    ├── styles.css         Mobile-first Solarflower design system
+    ├── manifest.json      PWA manifest
+    ├── sw.js              Service worker (cache-first offline)
+    └── icons/             App icons (SVG + PNG)
 ```
 
 ---

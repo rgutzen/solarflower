@@ -74,3 +74,7 @@ solar-app/
 
 AGPL-3.0 — see [LICENSE](../LICENSE).
 Commercial licensing available — see [COMMERCIAL_LICENSE.md](../COMMERCIAL_LICENSE.md).
+
+## See Also
+
+- [Panel Compass](../mobile-app/) — on-site PWA for real-time panel alignment using phone sensors

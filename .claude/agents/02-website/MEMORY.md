@@ -4,7 +4,7 @@ _Update this file after every working session._
 _Last updated: 2026-03-07_
 
 ## Scope
-- **Directory:** `/home/rgutzen/01_PROJECTS/solarflower-app/website/`
+- **Directory:** `/home/rgutzen/01_PROJECTS/solarflower/website/`
 - **Base prompt:** `.claude/agents/02-website/02_website.md`
 - **Do NOT modify:** any file outside `website/`
 
@@ -53,8 +53,8 @@ website/
 
 ## Links Embedded
 - Web-App: `http://localhost:8501` (placeholder)
-- Notebook: `https://github.com/rgutzen/solarflower-app/blob/main/solar_panel_power.ipynb`
-- GitHub: `https://github.com/rgutzen/solarflower-app`
+- Notebook: `https://github.com/rgutzen/solarflower/blob/main/solar_panel_power.ipynb`
+- GitHub: `https://github.com/rgutzen/solarflower`
 - Mobile: `#coming-soon` (greyed out)
 
 ## TODO / Next Iteration

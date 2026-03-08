@@ -3,12 +3,12 @@
 ## Project Structure
 
 ```
-solarflower-app/
+solarflower/
 ├── notebook/            Component 1: SciComm educational notebook
 │   └── solar_panel_power.ipynb
 ├── solar-app/           Component 2: Solar Advisor web-app (complete)
 ├── website/             Component 3: Landing page (not started)
-├── mobile-app/          Component 4: Panel Compass PWA (not started)
+├── mobile-app/          Component 4: Panel Compass PWA (complete)
 ├── LICENSE, COMMERCIAL_LICENSE.md, .gitignore, README.md
 └── .claude/             All coordination files (below)
 ```
@@ -20,7 +20,7 @@ solarflower-app/
 | 1 | SciComm Notebook | `notebook/` | Functional draft, needs extensions |
 | 2 | Web-App (Solar Advisor) | `solar-app/` | Complete, working |
 | 3 | Website (landing page) | `website/` | Not started |
-| 4 | Mobile-App (Panel Compass) | `mobile-app/` | Not started |
+| 4 | Mobile-App (Panel Compass) | `mobile-app/` | Complete |
 
 Full detail: `.claude/shared/status.md`
 
@@ -81,7 +81,7 @@ Working → move to `active.md`. Done → move to `done.md`.
 
 **Run web-app:**
 ```bash
-cd /home/rgutzen/01_PROJECTS/solarflower-app/solar-app
+cd /home/rgutzen/01_PROJECTS/solarflower/solar-app
 /home/rgutzen/miniforge3/envs/app-dev/bin/streamlit run app.py
 ```
 **Run notebook:**
@@ -89,7 +89,7 @@ cd /home/rgutzen/01_PROJECTS/solarflower-app/solar-app
 /home/rgutzen/miniforge3/envs/app-dev/bin/jupyter notebook notebook/solar_panel_power.ipynb
 ```
 **Environment:** `app-dev` conda — Python 3.12, pvlib 0.15.0, streamlit 1.55.0
-**Repo:** `git@github.com:rgutzen/solarflower-app.git`
+**Repo:** `git@github.com:rgutzen/solarflower.git`
 **License:** AGPL-3.0-or-later + commercial dual license
 
 ## Critical Rules (details in `shared/conventions.md`)

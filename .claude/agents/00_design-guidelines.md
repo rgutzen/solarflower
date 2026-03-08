@@ -177,7 +177,7 @@ The Solarflower logo is a stylized sunflower/solarpanel hybrid. Use the provided
 - **Stroke:** 1.5–2px for clarity at small sizes
 - **Color:** Inherit from context or use `--amber` for emphasis
 
-Never using any generic emojis!
+Never using any generic emojis like sun, leaf, flower, etc, or anything that feels too cute. Instead, use a rawer organic style that empowers instead of entertaining the user to follow design breadcrumps. So, use organic continous shapes that could be made from clay by hand, and add texture.
 
 ---
 

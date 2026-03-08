@@ -1,7 +1,7 @@
 # Project Status Board
 
 _Update this file whenever a component's status changes._
-_Last updated: 2026-03-07_
+_Last updated: 2026-03-08_
 
 ---
 
@@ -12,7 +12,7 @@ _Last updated: 2026-03-07_
 | 1 | SciComm Notebook | Functional draft | — | Add interactive widgets, extend with loss section |
 | 2 | Web-App | **Complete + CSV/JSON export added** | — | REST API endpoint next (for mobile) |
 | 3 | Website | **V1 + Solar Advisor page** | — | Deploy; add article.css/article.js |
-| 4 | Mobile-App | **Not started** | — | Assign to agent 04 |
+| 4 | Mobile-App | **Complete** | — | Deploy; connect to API for server-side yield |
 
 ---
 

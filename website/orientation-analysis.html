@@ -1,0 +1,640 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cost of Suboptimal Solar Panel Orientation | Solarflower</title>
+  <meta name="description" content="How much energy and money do you lose when your roof doesn't face the ideal direction? A quantitative analysis across five latitudes.">
+  <meta name="author" content="Robin Gutzen">
+  <meta name="theme-color" content="#F5A623">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="The Cost of Suboptimal Solar Panel Orientation — Solarflower">
+  <meta property="og:description" content="Quantifying energy yield penalties and financial impact of non-optimal tilt and azimuth across five latitudes.">
+  <meta property="og:type" content="article">
+
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="article.css">
+  <link rel="stylesheet" href="orientation-analysis.css">
+</head>
+<body class="article-page">
+
+  <!-- Inline SVG icon sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <defs>
+      <filter id="sf-clay" x="-20%" y="-20%" width="140%" height="140%"
+              color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.045 0.065"
+                      numOctaves="5" seed="9" result="warp"/>
+        <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.5"
+                           xChannelSelector="R" yChannelSelector="G" result="warped"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="4"
+                      seed="2" result="grain"/>
+        <feColorMatrix in="grain" type="saturate" values="0" result="gray-grain"/>
+        <feComposite in="gray-grain" in2="warped" operator="in" result="masked-grain"/>
+        <feBlend in="warped" in2="masked-grain" mode="multiply"/>
+      </filter>
+    </defs>
+    <symbol id="sf-notebook" viewBox="0 0 48 48" overflow="visible">
+      <path d="M 11,9 L 37,8 L 41,11 L 40,40 L 10,42 L 7,38 Z"
+            fill="currentColor" filter="url(#sf-clay)"/>
+    </symbol>
+    <symbol id="sf-advisor" viewBox="0 0 48 48" overflow="visible">
+      <path d="M 22,5 L 40,13 L 43,29 L 29,43 L 11,40 L 6,22 Z"
+            fill="currentColor" filter="url(#sf-clay)"/>
+    </symbol>
+    <symbol id="sf-compass" viewBox="0 0 48 48" overflow="visible">
+      <path d="M 24,5 C 26,6 39,18 39,31 C 39,41 32,44 24,44 C 16,44 9,41 9,31 C 9,18 22,6 24,5 Z"
+            fill="currentColor" filter="url(#sf-clay)"/>
+    </symbol>
+  </svg>
+
+  <!-- ================================================================== -->
+  <!-- NAVIGATION                                                         -->
+  <!-- ================================================================== -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__brand" aria-label="Solarflower home">
+        <img src="assets/logo.svg" alt="" width="36" height="36" class="nav__logo">
+        <span class="nav__wordmark dark-green">Solarflower</span>
+      </a>
+      <ul class="nav__links" role="list">
+        <li>
+          <a href="article.html" class="nav__comp nav__comp--notebook">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><use href="#sf-notebook"/></svg>
+            <span>Science</span>
+          </a>
+        </li>
+        <li>
+          <a href="solar-advisor.html" class="nav__comp nav__comp--advisor">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><use href="#sf-advisor"/></svg>
+            <span>Solar Advisor</span>
+          </a>
+        </li>
+        <li>
+          <a href="mobile-app/" class="nav__comp nav__comp--compass">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><use href="#sf-compass"/></svg>
+            <span>Panel Compass</span>
+          </a>
+        </li>
+        <li><a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" class="nav__github" aria-label="View on GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================================================================== -->
+  <!-- HERO                                                               -->
+  <!-- ================================================================== -->
+  <header class="article-hero">
+    <div class="article-hero__organic" aria-hidden="true">
+      <svg class="hero__blob hero__blob--1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M44.7,-76.4C58.8,-69.2,71.8,-58.1,79.6,-44.2C87.4,-30.3,90,-13.6,88.2,2.4C86.4,18.4,80.2,33.6,70.3,45.7C60.4,57.8,46.8,66.7,32.4,73.5C18,80.3,2.8,85,-12.6,83.9C-28,82.8,-43.6,75.9,-56.2,65.3C-68.8,54.7,-78.4,40.4,-83.4,24.5C-88.4,8.6,-88.8,-8.9,-83.5,-24.1C-78.2,-39.3,-67.2,-52.2,-53.7,-59.7C-40.2,-67.2,-24.2,-69.3,-8.4,-73.2C7.4,-77.1,14.8,-82.8,27.4,-82.3C40,-81.8,57.8,-75,44.7,-76.4Z" transform="translate(100 100)" fill="url(#blobGradOA1)"/>
+        <defs><linearGradient id="blobGradOA1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5A623" stop-opacity="0.06"/><stop offset="100%" stop-color="#66BB6A" stop-opacity="0.04"/></linearGradient></defs>
+      </svg>
+    </div>
+    <div class="container">
+      <p class="article-hero__breadcrumb"><a href="index.html">Solarflower</a> <span aria-hidden="true">/</span> Analysis</p>
+      <h1 class="article-hero__title">The Cost of Suboptimal Solar&nbsp;Panel&nbsp;Orientation</h1>
+      <p class="article-hero__subtitle">How much energy and money do you lose when your roof doesn't face the ideal direction?</p>
+      <p class="article-hero__lead">Solar panels produce the most energy when oriented to intercept maximum annual irradiance — typically facing the equator at a tilt roughly equal to the site latitude. In practice, most panels are mounted on existing roofs whose orientation is dictated by architecture, not solar geometry. This analysis quantifies the energy yield penalty and financial impact of non-optimal tilt and azimuth across five representative locations spanning 1°N to 70°N latitude.</p>
+    </div>
+    <div class="article-hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C360,55 720,10 1080,35 C1260,47 1380,22 1440,30 L1440,60 L0,60 Z" fill="var(--bg-warm)"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- TABLE OF CONTENTS                                                  -->
+  <!-- ================================================================== -->
+  <aside class="toc-sidebar" aria-label="Table of contents">
+    <nav class="toc">
+      <p class="toc__label">Contents</p>
+      <ol class="toc__list" role="list">
+        <li><a href="#setup"      class="toc__link">Setup &amp; Locations</a></li>
+        <li><a href="#heatmaps"   class="toc__link">Orientation Heatmaps</a></li>
+        <li><a href="#azimuth"    class="toc__link">Azimuth Sensitivity</a></li>
+        <li><a href="#tilt"       class="toc__link">Tilt Sensitivity</a></li>
+        <li><a href="#tolerance"  class="toc__link">Tolerance Envelope</a></li>
+        <li><a href="#roof"       class="toc__link">Roof Scenarios</a></li>
+        <li><a href="#economics"  class="toc__link">Economic Impact</a></li>
+        <li><a href="#cross-lat"  class="toc__link">Cross-Latitude Analysis</a></li>
+        <li><a href="#findings"   class="toc__link">Key Findings</a></li>
+        <li><a href="#methodology" class="toc__link">Methodology</a></li>
+      </ol>
+    </nav>
+  </aside>
+
+  <!-- ================================================================== -->
+  <!-- ARTICLE BODY                                                       -->
+  <!-- ================================================================== -->
+  <main class="article" id="article">
+    <div class="article__container container">
+
+      <!-- Progress bar -->
+      <div class="article__progress" aria-hidden="true">
+        <div class="article__progress-bar" id="progress-bar"></div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SETUP & LOCATIONS                                            -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="setup" data-reveal>
+        <span class="article__step-badge">Setup</span>
+        <h2>Locations &amp; System Configuration</h2>
+        <h3>Five latitudes, one reference system — isolating the effect of orientation</h3>
+
+        <p>We analyse five cities spanning from the equator to the subarctic, each representing a distinct climate and solar irradiance profile. All simulations use the same reference system: an 8&nbsp;kWp array (20&nbsp;×&nbsp;400&nbsp;W modern mono-Si modules) with a 96% efficiency inverter.</p>
+
+        <div class="article__table-wrap">
+          <table class="article__table">
+            <thead>
+              <tr>
+                <th>City</th>
+                <th>Latitude</th>
+                <th>Climate</th>
+                <th>GHI (kWh/m²/yr)</th>
+                <th>Avg Temp (°C)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Tromsø, Norway</td><td>69.6°N</td><td>Subarctic, long winters</td><td>715</td><td>2.9</td></tr>
+              <tr><td>Berlin, Germany</td><td>52.5°N</td><td>Temperate, continental</td><td>1,161</td><td>11.1</td></tr>
+              <tr><td>Rome, Italy</td><td>41.9°N</td><td>Mediterranean</td><td>1,611</td><td>16.9</td></tr>
+              <tr><td>Cairo, Egypt</td><td>30.0°N</td><td>Arid, clear sky</td><td>2,050</td><td>23.8</td></tr>
+              <tr><td>Singapore</td><td>1.3°N</td><td>Equatorial, tropical</td><td>1,858</td><td>27.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Climate data comes from Open-Meteo historical satellite observations (ERA5/SARAH3, 2023). For each location, we sweep <strong>1,368 orientations</strong> (19 tilts × 72 azimuths at 5° resolution) using a vectorised Hay-Davies sky model with PVWatts DC chain.</p>
+
+        <div class="oa__optimal-grid">
+          <div class="oa__optimal-card">
+            <span class="oa__optimal-city">Tromsø</span>
+            <span class="oa__optimal-value">45° / 195°</span>
+            <span class="oa__optimal-yield">788 kWh/kWp</span>
+          </div>
+          <div class="oa__optimal-card">
+            <span class="oa__optimal-city">Berlin</span>
+            <span class="oa__optimal-value">40° / 185°</span>
+            <span class="oa__optimal-yield">1,217 kWh/kWp</span>
+          </div>
+          <div class="oa__optimal-card">
+            <span class="oa__optimal-city">Rome</span>
+            <span class="oa__optimal-value">35° / 190°</span>
+            <span class="oa__optimal-yield">1,632 kWh/kWp</span>
+          </div>
+          <div class="oa__optimal-card">
+            <span class="oa__optimal-city">Cairo</span>
+            <span class="oa__optimal-value">25° / 200°</span>
+            <span class="oa__optimal-yield">1,859 kWh/kWp</span>
+          </div>
+          <div class="oa__optimal-card">
+            <span class="oa__optimal-city">Singapore</span>
+            <span class="oa__optimal-value">10° / 280°</span>
+            <span class="oa__optimal-yield">1,551 kWh/kWp</span>
+          </div>
+        </div>
+        <p class="oa__caption">Optimal tilt / azimuth and resulting specific yield for each location. Note Singapore's westward optimal — driven by afternoon-heavy clear-sky patterns in equatorial climates.</p>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- HEATMAPS                                                     -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="heatmaps" data-reveal>
+        <span class="article__step-badge">Step 1</span>
+        <h2>Orientation Sensitivity Heatmaps</h2>
+        <h3>The full tilt × azimuth yield surface at each latitude</h3>
+
+        <p>Each heatmap shows the <strong>relative yield</strong> (% of location-maximum) as a function of panel tilt (y-axis) and azimuth (x-axis). The optimal point is marked with a white star. Compass directions are labelled on the x-axis.</p>
+
+        <figure class="oa__figure oa__figure--wide">
+          <img src="assets/orientation-analysis/fig-01.png"
+               alt="Heatmaps of annual energy yield vs panel orientation for five locations from Tromsø to Singapore, showing how the yield surface flattens towards the equator"
+               loading="lazy">
+          <figcaption>Annual energy yield vs. panel orientation. The yield surface becomes flatter (less sensitive) towards the equator, where the sun transits almost directly overhead.</figcaption>
+        </figure>
+
+        <div class="article__callout">
+          <strong>Key observation:</strong> At high latitudes (Tromsø, Berlin), the yield drops sharply for north-facing or high-tilt orientations. Near the equator (Singapore), the surface is remarkably flat — almost any orientation produces good output.
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- AZIMUTH SENSITIVITY                                          -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="azimuth" data-reveal>
+        <span class="article__step-badge">Step 2</span>
+        <h2>Yield Loss vs. Azimuth Deviation</h2>
+        <h3>"My roof faces 60° off south — how much yield do I lose?"</h3>
+
+        <p>Fix tilt at each location's optimum and sweep azimuth away from the optimal direction. This directly answers the most common homeowner question.</p>
+
+        <figure class="oa__figure">
+          <img src="assets/orientation-analysis/fig-02.png"
+               alt="Line chart showing yield loss percentage as azimuth deviates from optimal for five locations, with reference lines at ±30°, ±60°, and ±90° (E/W)"
+               loading="lazy">
+          <figcaption>Yield loss from azimuth misalignment, at optimal tilt for each location. Dashed lines mark ±30°, ±60°, and ±90° (east/west) deviations.</figcaption>
+        </figure>
+
+        <div class="article__table-wrap">
+          <table class="article__table">
+            <thead>
+              <tr><th>City</th><th>±30°</th><th>±60°</th><th>±90° (E/W)</th><th>180° (N)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Tromsø</td><td>2.8%</td><td>10.8%</td><td>22.9%</td><td>53.2%</td></tr>
+              <tr><td>Berlin</td><td>3.0%</td><td>11.5%</td><td>24.3%</td><td>55.8%</td></tr>
+              <tr><td>Rome</td><td>3.1%</td><td>11.8%</td><td>24.1%</td><td>53.5%</td></tr>
+              <tr><td>Cairo</td><td>2.0%</td><td>7.3%</td><td>14.9%</td><td>32.6%</td></tr>
+              <tr><td>Singapore</td><td>0.3%</td><td>0.9%</td><td>1.8%</td><td>3.1%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="oa__caption">Yield loss at key azimuth deviations from optimal (at optimal tilt). Values are averages of positive and negative deviations.</p>
+
+        <div class="article__callout article__callout--note">
+          <strong>Rule of thumb:</strong> A ±30° azimuth deviation from optimal costs only 2–3% yield at most latitudes — most roofs are fine. But east/west facing (±90°) costs 15–25% at European latitudes.
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- TILT SENSITIVITY                                             -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="tilt" data-reveal>
+        <span class="article__step-badge">Step 3</span>
+        <h2>Yield Loss vs. Tilt Deviation</h2>
+        <h3>Does a flat roof, a 30° pitch, or a steep 45° pitch matter much?</h3>
+
+        <p>Fix azimuth at the optimal direction and sweep tilt. This shows how the sensitivity to tilt errors changes with latitude.</p>
+
+        <figure class="oa__figure">
+          <img src="assets/orientation-analysis/fig-03.png"
+               alt="Line chart showing relative yield vs panel tilt for five locations at their optimal azimuth, with dots marking each location's optimal tilt"
+               loading="lazy">
+          <figcaption>Yield vs. tilt at optimal azimuth. Dots mark each location's optimum. Common roof pitches are annotated.</figcaption>
+        </figure>
+
+        <div class="article__table-wrap">
+          <table class="article__table">
+            <thead>
+              <tr><th>City</th><th>Opt. tilt</th><th>Flat (0°)</th><th>15°</th><th>30°</th><th>45°</th><th>60°</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Tromsø</td><td>45°</td><td>80.1%</td><td>90.7%</td><td>97.7%</td><td>100.0%</td><td>97.7%</td></tr>
+              <tr><td>Berlin</td><td>40°</td><td>82.8%</td><td>93.4%</td><td>99.1%</td><td>99.5%</td><td>94.5%</td></tr>
+              <tr><td>Rome</td><td>35°</td><td>82.9%</td><td>93.8%</td><td>99.4%</td><td>99.2%</td><td>93.6%</td></tr>
+              <tr><td>Cairo</td><td>25°</td><td>90.5%</td><td>98.1%</td><td>100.0%</td><td>96.3%</td><td>87.2%</td></tr>
+              <tr><td>Singapore</td><td>10°</td><td>99.3%</td><td>99.6%</td><td>95.3%</td><td>87.7%</td><td>77.9%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="oa__caption">Relative yield at common roof pitches (at optimal azimuth). Tilt is generally more forgiving than azimuth.</p>
+
+        <div class="article__callout">
+          <strong>Tilt is forgiving:</strong> At European latitudes, any pitch between 15° and 60° yields within ~7% of optimal. A flat roof loses 17–25%, while Singapore barely cares about tilt at all.
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- TOLERANCE ENVELOPE                                           -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="tolerance" data-reveal>
+        <span class="article__step-badge">Step 4</span>
+        <h2>Tolerance Envelope</h2>
+        <h3>How far can you deviate in both tilt and azimuth before losing more than X%?</h3>
+
+        <p>The contour plots below show iso-yield lines as a function of <strong>simultaneous</strong> tilt and azimuth deviation from optimal. They answer the combined-error question that individual sensitivity curves cannot.</p>
+
+        <figure class="oa__figure oa__figure--wide">
+          <img src="assets/orientation-analysis/fig-04.png"
+               alt="Contour plots showing iso-yield lines for combined tilt and azimuth deviation at five locations, revealing how the 90% and 95% envelopes shrink at higher latitudes"
+               loading="lazy">
+          <figcaption>Tolerance envelopes: iso-yield contours for combined tilt + azimuth deviation. White star marks the optimum (0,0). The 90% contour is the practical limit for most installations.</figcaption>
+        </figure>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- ROOF SCENARIOS                                               -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="roof" data-reveal>
+        <span class="article__step-badge">Step 5</span>
+        <h2>Detailed Roof Scenario Comparison</h2>
+        <h3>Full-physics simulation for 8 common roof orientations</h3>
+
+        <p>We now run the <strong>full-physics simulation</strong> (Perez sky model, physical IAM, Faiman thermal model) for 8 common roof orientations at each location. This is more accurate than the grid sweep, which uses a simplified Hay-Davies + ASHRAE IAM approach.</p>
+
+        <div class="article__table-wrap">
+          <table class="article__table">
+            <thead>
+              <tr><th>Scenario</th><th>Tilt</th><th>Azimuth</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Optimal</td><td>varies</td><td>varies</td><td>Best orientation per location</td></tr>
+              <tr><td>Flat</td><td>0°</td><td>—</td><td>Flat roof, no tilt</td></tr>
+              <tr><td>South 15°</td><td>15°</td><td>180°</td><td>Low-slope south-facing</td></tr>
+              <tr><td>South 30°</td><td>30°</td><td>180°</td><td>Standard pitch south</td></tr>
+              <tr><td>South 45°</td><td>45°</td><td>180°</td><td>Steep south-facing</td></tr>
+              <tr><td>East 30°</td><td>30°</td><td>90°</td><td>East-facing gable</td></tr>
+              <tr><td>West 30°</td><td>30°</td><td>270°</td><td>West-facing gable</td></tr>
+              <tr><td>North 30°</td><td>30°</td><td>0°</td><td>North-facing (worst case in NH)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure class="oa__figure">
+          <img src="assets/orientation-analysis/fig-05.png"
+               alt="Grouped bar chart comparing relative yield across 8 roof orientation scenarios for 5 locations"
+               loading="lazy">
+          <figcaption>Yield by roof orientation scenario (full-physics simulation). The 90% threshold line highlights scenarios where meaningful yield is lost.</figcaption>
+        </figure>
+
+        <div class="article__callout">
+          <strong>Berlin example:</strong> An east-facing 30° roof (959 kWh/kWp) yields 24% less than optimal (1,268 kWh/kWp), while a south-facing 30° pitch (1,240 kWh/kWp) loses only 2%. The west side fares slightly better than east due to afternoon temperature and irradiance patterns.
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- ECONOMICS                                                    -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="economics" data-reveal>
+        <span class="article__step-badge">Step 6</span>
+        <h2>Economic Impact of Suboptimal Orientation</h2>
+        <h3>How orientation losses translate to €, payback period, and NPV</h3>
+
+        <p>Using the full-physics simulation results, we compute lifetime economic metrics for each roof scenario. Parameters: €1.10/Wp installed cost, €0.30/kWh grid price (2% escalation/yr), 4% discount rate, 0.5%/yr degradation, 25-year lifetime, 70% self-consumption.</p>
+
+        <div class="oa__econ-highlights">
+          <div class="oa__econ-card">
+            <span class="oa__econ-city">Berlin</span>
+            <span class="oa__econ-label">East-facing NPV loss</span>
+            <span class="oa__econ-value oa__econ-value--loss">−€10,348</span>
+            <span class="oa__econ-detail">Payback: 3.7 → 4.9 yr (+1.2 yr)</span>
+          </div>
+          <div class="oa__econ-card">
+            <span class="oa__econ-city">Rome</span>
+            <span class="oa__econ-label">East-facing NPV loss</span>
+            <span class="oa__econ-value oa__econ-value--loss">−€14,463</span>
+            <span class="oa__econ-detail">Payback: 2.8 → 3.7 yr (+0.9 yr)</span>
+          </div>
+          <div class="oa__econ-card">
+            <span class="oa__econ-city">Cairo</span>
+            <span class="oa__econ-label">East-facing NPV loss</span>
+            <span class="oa__econ-value oa__econ-value--loss">−€12,484</span>
+            <span class="oa__econ-detail">Payback: 2.5 → 3.1 yr (+0.6 yr)</span>
+          </div>
+          <div class="oa__econ-card">
+            <span class="oa__econ-city">Tromsø</span>
+            <span class="oa__econ-label">East-facing NPV loss</span>
+            <span class="oa__econ-value oa__econ-value--loss">−€7,634</span>
+            <span class="oa__econ-detail">Payback: 5.8 → 8.0 yr (+2.2 yr)</span>
+          </div>
+        </div>
+
+        <figure class="oa__figure oa__figure--wide">
+          <img src="assets/orientation-analysis/fig-06.png"
+               alt="Two-panel chart showing Net Present Value and Levelised Cost of Energy vs azimuth deviation for five locations"
+               loading="lazy">
+          <figcaption>NPV (left) and LCOE (right) vs. azimuth deviation from optimal, at optimal tilt. The economic penalty amplifies the yield loss because CAPEX is fixed.</figcaption>
+        </figure>
+
+        <figure class="oa__figure">
+          <img src="assets/orientation-analysis/fig-07.png"
+               alt="Line chart of simple payback period vs azimuth deviation for five locations, showing payback rising steeply beyond ±90° at high latitudes"
+               loading="lazy">
+          <figcaption>Payback period vs. azimuth deviation. At Tromsø, an east/west-facing system takes 8+ years to pay back vs. 5.8 years at optimal. The 25-year lifetime horizon is shown as a red dashed line.</figcaption>
+        </figure>
+
+        <div class="article__callout article__callout--note">
+          <strong>The amplification effect:</strong> A 15% yield loss translates to a 30%+ reduction in NPV because the CAPEX is fixed regardless of orientation. This makes good orientation advice disproportionately valuable.
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- CROSS-LATITUDE                                               -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="cross-lat" data-reveal>
+        <span class="article__step-badge">Step 7</span>
+        <h2>Cross-Latitude Sensitivity</h2>
+        <h3>How does latitude govern orientation forgiveness?</h3>
+
+        <p>We extract two key metrics for each location: the azimuth and tilt deviation ranges that keep yield within 90% and 95% of optimal.</p>
+
+        <figure class="oa__figure oa__figure--wide">
+          <img src="assets/orientation-analysis/fig-08.png"
+               alt="Bar charts showing azimuth and tilt tolerance by location, with Singapore showing near-360° azimuth tolerance and all locations having similar tilt tolerance"
+               loading="lazy">
+          <figcaption>Orientation tolerance by location. Singapore is effectively orientation-insensitive for azimuth. Tilt tolerance is similar across latitudes (~±25–30° for 90% yield).</figcaption>
+        </figure>
+
+        <div class="article__table-wrap">
+          <table class="article__table">
+            <thead>
+              <tr><th>City</th><th>Lat (°N)</th><th>Az ±90%</th><th>Az ±95%</th><th>Tilt ±90%</th><th>Tilt ±95%</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Tromsø</td><td>69.7</td><td>±55°</td><td>±35°</td><td>±30°</td><td>±20°</td></tr>
+              <tr><td>Berlin</td><td>52.5</td><td>±50°</td><td>±35°</td><td>±28°</td><td>±18°</td></tr>
+              <tr><td>Rome</td><td>41.9</td><td>±50°</td><td>±35°</td><td>±28°</td><td>±18°</td></tr>
+              <tr><td>Cairo</td><td>30.0</td><td>±65°</td><td>±45°</td><td>±28°</td><td>±18°</td></tr>
+              <tr><td>Singapore</td><td>1.4</td><td>±360°</td><td>±360°</td><td>±20°</td><td>±15°</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- KEY FINDINGS                                                 -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="findings" data-reveal>
+        <span class="article__step-badge">Findings</span>
+        <h2>Key Findings</h2>
+
+        <div class="oa__findings">
+
+          <div class="oa__finding-group">
+            <h4>Optimal Orientations</h4>
+            <ul>
+              <li><strong>Tromsø</strong> (69.7°N): 45° tilt, 195° (S) → 788 kWh/kWp/yr</li>
+              <li><strong>Berlin</strong> (52.5°N): 40° tilt, 185° (S) → 1,217 kWh/kWp/yr</li>
+              <li><strong>Rome</strong> (41.9°N): 35° tilt, 190° (S) → 1,632 kWh/kWp/yr</li>
+              <li><strong>Cairo</strong> (30.0°N): 25° tilt, 200° (S) → 1,859 kWh/kWp/yr</li>
+              <li><strong>Singapore</strong> (1.4°N): 10° tilt, 280° (W) → 1,551 kWh/kWp/yr</li>
+            </ul>
+          </div>
+
+          <div class="oa__finding-group">
+            <h4>Azimuth Sensitivity</h4>
+            <ul>
+              <li><strong>Tromsø:</strong> East loses 27.9%, West loses 20.4%, North loses 49.3%</li>
+              <li><strong>Berlin:</strong> East loses 24.4%, West loses 22.2%, North loses 49.3%</li>
+              <li><strong>Rome:</strong> East loses 25.6%, West loses 20.3%, North loses 49.6%</li>
+              <li><strong>Cairo:</strong> East loses 19.7%, West loses 12.5%, North loses 38.3%</li>
+              <li><strong>Singapore:</strong> East loses 10.1%, West loses 2.6%, North loses 8.1%</li>
+            </ul>
+          </div>
+
+          <div class="oa__finding-group">
+            <h4>Economic Impact</h4>
+            <ul>
+              <li><strong>Tromsø:</strong> East costs €7,634 in lost NPV (payback 5.8 → 8.0 yr). North costs €13,489.</li>
+              <li><strong>Berlin:</strong> East costs €10,348 in lost NPV (payback 3.7 → 4.9 yr). North costs €20,907.</li>
+              <li><strong>Rome:</strong> East costs €14,463 in lost NPV (payback 2.8 → 3.7 yr). North costs €27,995.</li>
+              <li><strong>Cairo:</strong> East costs €12,484 in lost NPV (payback 2.5 → 3.1 yr). North costs €24,298.</li>
+              <li><strong>Singapore:</strong> East costs €5,237 in lost NPV (payback 3.0 → 3.4 yr). North costs €4,196.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="oa__rules">
+          <h4>Rules of Thumb</h4>
+          <ol>
+            <li><strong>±30° azimuth deviation</strong> from optimal costs only <strong>2–5%</strong> yield at most latitudes — most roofs are fine.</li>
+            <li><strong>East/West (±90°)</strong> costs <strong>10–20%</strong> at mid-latitudes, but only ~5% near the equator.</li>
+            <li><strong>Tilt is more forgiving than azimuth</strong> — a ±15° tilt error typically costs &lt;5%.</li>
+            <li><strong>Equatorial locations are nearly orientation-insensitive</strong> — Singapore loses &lt;10% even for north-facing panels.</li>
+            <li><strong>High latitudes are azimuth-sensitive but tilt-tolerant</strong> — at Tromsø, the flat tilt curve means any common pitch is acceptable.</li>
+            <li><strong>The economic penalty amplifies yield loss</strong> — a 15% yield loss can mean 30%+ reduction in NPV due to fixed CAPEX.</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- METHODOLOGY                                                  -->
+      <!-- ============================================================ -->
+      <section class="article__section" id="methodology" data-reveal>
+        <span class="article__step-badge">Method</span>
+        <h2>Methodology Notes</h2>
+
+        <div class="oa__method-grid">
+          <div class="oa__method-card">
+            <h4>Climate Data</h4>
+            <p>PVGIS Typical Meteorological Year (TMY) synthesised from 2005–2023 satellite observations (SARAH3/ERA5). Represents long-term average conditions, not a single year.</p>
+          </div>
+          <div class="oa__method-card">
+            <h4>Orientation Grid (§1–4)</h4>
+            <p>Vectorised Hay-Davies sky diffuse model with ASHRAE IAM and PVWatts DC model. ~1–2% conservative vs. the full Perez chain but evaluates 1,300+ orientations in seconds.</p>
+          </div>
+          <div class="oa__method-card">
+            <h4>Roof Scenarios (§5–6)</h4>
+            <p>Full physics chain — Perez anisotropic sky, physical IAM (AR glass), Faiman cell temperature, PVWatts DC, PVWatts inverter (96% eff.), full DC+AC loss budget.</p>
+          </div>
+          <div class="oa__method-card">
+            <h4>Economic Model</h4>
+            <p>Simple CAPEX-only, no O&amp;M, no battery, no financing. Self-consumption = 70%, export at €0.08/kWh. Conservative for most European markets.</p>
+          </div>
+          <div class="oa__method-card">
+            <h4>System</h4>
+            <p>20 × 400 W = 8 kWp (modern mono-Si), single inverter. All results normalised to kWh/kWp for system-size independence.</p>
+          </div>
+          <div class="oa__method-card">
+            <h4>Source Code</h4>
+            <p>The full analysis is available as a <a href="https://github.com/rgutzen/solarflower-app/blob/main/notebook/orientation_analysis.ipynb" target="_blank" rel="noopener noreferrer">Jupyter notebook</a> in the Solarflower repository, using the open-source <a href="https://github.com/rgutzen/solarflower-app/tree/main/solar-app/core" target="_blank" rel="noopener noreferrer">solar-app core</a> physics engine.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- CODA                                                         -->
+      <!-- ============================================================ -->
+      <p class="article__coda">
+        Analysis generated with <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer">Solarflower</a> — open-source solar yield simulation tools.
+        <br>Want to run the same analysis for your specific location?
+        <a href="solar-advisor.html">Try the Solar&nbsp;Advisor&nbsp;→</a>
+      </p>
+
+    </div><!-- /.article__container -->
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                             -->
+  <!-- ================================================================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
+        <span>Solarflower</span>
+      </div>
+      <p class="footer__copy">&copy; 2025 Robin Gutzen &middot; <a href="https://github.com/rgutzen/solarflower-app/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0-or-later</a></p>
+      <div class="footer__links">
+        <a href="https://github.com/rgutzen/solarflower-app" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="mailto:robin.gutzen@outlook.com" aria-label="Email Robin Gutzen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Progress bar
+    (function () {
+      var bar = document.getElementById('progress-bar');
+      if (!bar) return;
+      window.addEventListener('scroll', function () {
+        var doc = document.documentElement;
+        var scrollTop = window.scrollY || doc.scrollTop;
+        var scrollHeight = doc.scrollHeight - doc.clientHeight;
+        var pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        bar.style.width = pct + '%';
+      }, { passive: true });
+    })();
+
+    // TOC active state
+    (function () {
+      var sections = document.querySelectorAll('.article__section[id]');
+      var links = document.querySelectorAll('.toc__link');
+      if (!sections.length || !links.length) return;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove('active'); });
+            var target = document.querySelector('.toc__link[href="#' + entry.target.id + '"]');
+            if (target) target.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -75% 0px' });
+      sections.forEach(function (s) { observer.observe(s); });
+    })();
+
+    // Scroll-triggered reveal
+    (function () {
+      var els = document.querySelectorAll('[data-reveal]');
+      if (!els.length) return;
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('revealed');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      els.forEach(function (el) { obs.observe(el); });
+    })();
+
+    // Nav scroll state
+    (function () {
+      var nav = document.querySelector('.nav');
+      if (!nav) return;
+      window.addEventListener('scroll', function () {
+        nav.classList.toggle('nav--scrolled', window.scrollY > 20);
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

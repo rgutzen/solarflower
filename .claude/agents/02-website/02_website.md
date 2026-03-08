@@ -28,7 +28,7 @@ The Solarflower project has four components. You work on component 3:
 3. **Website** (`website/`) — YOUR COMPONENT
 4. **Mobile-App** (`mobile-app/`) — on-site orientation helper app
 
-**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower-app/`
+**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower/`
 **License:** AGPL-3.0-or-later
 **Copyright:** Robin Gutzen — robin.gutzen@outlook.com
 
@@ -98,7 +98,7 @@ something a solar energy consultant or a science educator would feel proud linki
 
 **4. Open Source**
 - Brief note on AGPL-3.0 license
-- GitHub link: https://github.com/rgutzen/solarflower-app
+- GitHub link: https://github.com/rgutzen/solarflower
 - Invitation to contribute
 
 ### Footer
@@ -127,8 +127,8 @@ For CSS/JS files use the appropriate comment syntax.
 
 Until the app is deployed and the mobile app exists, use these placeholders:
 - Web-App: `http://localhost:8501` (note: "or self-host the Streamlit app")
-- Notebook: `https://github.com/rgutzen/solarflower-app/blob/main/notebook/solar_panel_power.ipynb`
-- GitHub: `https://github.com/rgutzen/solarflower-app`
+- Notebook: `https://github.com/rgutzen/solarflower/blob/main/notebook/solar_panel_power.ipynb`
+- GitHub: `https://github.com/rgutzen/solarflower`
 - Mobile: `#coming-soon`
 
 ## Coordination Notes
@@ -136,4 +136,4 @@ Until the app is deployed and the mobile app exists, use these placeholders:
 - Do NOT modify files outside `website/`.
 - The `solar-app/` Streamlit app uses color `#F5A623` as accent — you may reuse this for brand consistency.
 - Memory and plans are in `.claude/memory/MEMORY.md`.
-- The project is already on GitHub at `https://github.com/rgutzen/solarflower-app`.
+- The project is already on GitHub at `https://github.com/rgutzen/solarflower`.

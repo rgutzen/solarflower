@@ -1,0 +1,329 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#F5A623">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Panel Compass — Real-time solar panel orientation helper. Align your panels to the optimal tilt and azimuth using your phone's sensors.">
+
+  <title>Panel Compass — Solarflower</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Fonts (Lora serif for headings, system sans for body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ================================================================== -->
+  <!-- HEADER                                                              -->
+  <!-- ================================================================== -->
+  <header class="header">
+    <div class="header__brand">
+      <svg class="header__logo" width="28" height="28" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M24,5 L40,13 L43,30 L33,43 L13,42 L5,27 L9,12 Z" fill="#F5A623"/>
+      </svg>
+      <span class="header__title">Panel Compass</span>
+    </div>
+    <button class="header__contrast-btn" id="contrast-btn" aria-label="Toggle high-contrast mode" title="High contrast for outdoor use">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- MAIN CONTENT                                                        -->
+  <!-- ================================================================== -->
+  <main class="app">
+
+    <!-- LOCATION BAR --------------------------------------------------- -->
+    <section class="location" id="location-section">
+      <button class="location__btn" id="location-btn" aria-label="Change location">
+        <svg class="location__icon" width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24,6 C15,6 9,14 9,23 C9,34 24,44 24,44 C24,44 39,34 39,23 C39,14 33,6 24,6 Z" fill="currentColor"/>
+          <circle cx="24" cy="22" r="6" fill="#FCFCFA"/>
+        </svg>
+        <span class="location__text" id="location-text">
+          <span class="spinner" id="location-spinner" aria-hidden="true"></span>
+          Detecting location…
+        </span>
+        <span class="location__coords" id="location-coords"></span>
+      </button>
+
+      <!-- Manual entry (hidden by default) -->
+      <div class="location__manual" id="location-manual" hidden>
+        <div class="location__manual-inner">
+          <label class="location__label">
+            Latitude
+            <input type="number" id="manual-lat" class="location__input"
+                   placeholder="e.g. 52.5" step="0.1" min="-90" max="90"
+                   aria-describedby="lat-error">
+            <span class="location__error" id="lat-error" role="alert"></span>
+          </label>
+          <label class="location__label">
+            Longitude
+            <input type="number" id="manual-lon" class="location__input"
+                   placeholder="e.g. 13.4" step="0.1" min="-180" max="180"
+                   aria-describedby="lon-error">
+            <span class="location__error" id="lon-error" role="alert"></span>
+          </label>
+          <button class="btn btn--primary" id="manual-submit">Set Location</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPTIMAL INFO --------------------------------------------------- -->
+    <section class="optimal" id="optimal-section" hidden>
+      <div class="optimal__row">
+        <div class="optimal__item">
+          <span class="optimal__label">Optimal Tilt</span>
+          <span class="optimal__value" id="optimal-tilt">—</span>
+        </div>
+        <div class="optimal__item">
+          <span class="optimal__label">Optimal Azimuth</span>
+          <span class="optimal__value" id="optimal-azimuth">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SENSOR PERMISSION ---------------------------------------------- -->
+    <section class="permission" id="permission-section" hidden>
+      <p class="permission__text">
+        To guide you in real time, this app needs access to your phone's compass and tilt sensors.
+      </p>
+      <button class="btn btn--primary btn--large" id="permission-btn">
+        Enable Compass &amp; Tilt
+      </button>
+      <p class="permission__hint">
+        Place your phone flat on the panel surface, screen facing up.
+      </p>
+    </section>
+
+    <!-- COMPASS -------------------------------------------------------- -->
+    <section class="compass" id="compass-section" hidden>
+      <div class="compass__ring">
+        <!-- Compass rose SVG -->
+        <svg class="compass__svg" viewBox="0 0 300 300" aria-label="Compass showing current heading vs target">
+          <defs>
+            <line id="tick-major" x1="150" y1="18" x2="150" y2="38" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+            <line id="tick-minor" x1="150" y1="22" x2="150" y2="32" stroke="var(--ink-light)" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+          </defs>
+
+          <!-- Outer ring -->
+          <circle cx="150" cy="150" r="140" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity="0.12"/>
+          <circle cx="150" cy="150" r="130" fill="none" stroke="var(--ink)" stroke-width="0.5" opacity="0.08"/>
+
+          <!-- Target zone arcs: ±10° amber, ±3° green (drawn on outer ring) -->
+          <path id="compass-zone-amber" d="" fill="none" stroke="var(--amber)" stroke-width="10" opacity="0.2" stroke-linecap="round"/>
+          <path id="compass-zone-green" d="" fill="none" stroke="var(--success)" stroke-width="10" opacity="0.3" stroke-linecap="round"/>
+
+          <!-- Tick marks (every 10°, major every 30°) -->
+          <g id="compass-ticks">
+            <!-- Generated by app.js -->
+          </g>
+
+          <!-- Cardinal labels -->
+          <g class="compass__cardinals" font-family="var(--font-serif)" font-weight="700" font-size="20" fill="var(--ink)" text-anchor="middle" dominant-baseline="central">
+            <text x="150" y="50">N</text>
+            <text x="250" y="150">E</text>
+            <text x="150" y="252">S</text>
+            <text x="50" y="150">W</text>
+          </g>
+
+          <!-- Target azimuth indicator (orange triangle) -->
+          <g id="compass-target" transform="rotate(180 150 150)">
+            <path d="M150,12 L143,30 L157,30 Z" fill="var(--amber)"/>
+          </g>
+
+          <!-- Directional guidance arrow (large, rotates to point toward target) -->
+          <g id="compass-guide-arrow" transform="rotate(0 150 150)" opacity="0">
+            <path d="M150,55 L138,80 L145,80 L145,100 L155,100 L155,80 L162,80 Z"
+                  fill="var(--amber)" opacity="0.7"/>
+          </g>
+
+          <!-- Current heading needle (rotates with device) -->
+          <g id="compass-needle" transform="rotate(0 150 150)">
+            <polygon points="150,35 143,150 157,150" fill="var(--red)" opacity="0.85"/>
+            <polygon points="150,265 143,150 157,150" fill="var(--ink)" opacity="0.3"/>
+            <circle cx="150" cy="150" r="8" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.5"/>
+            <circle cx="150" cy="150" r="3" fill="var(--amber)"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Heading readout -->
+      <div class="compass__readout">
+        <div class="compass__current">
+          <span class="compass__value" id="heading-value">—</span>
+          <span class="compass__unit">°</span>
+          <span class="compass__cardinal" id="heading-cardinal"></span>
+        </div>
+        <div class="compass__delta" id="heading-delta" aria-live="polite">
+          Waiting for compass…
+        </div>
+      </div>
+    </section>
+
+    <!-- TILT METER ----------------------------------------------------- -->
+    <section class="tilt" id="tilt-section" hidden>
+      <div class="tilt__visual">
+        <svg class="tilt__svg" viewBox="0 0 300 160" aria-label="Tilt meter showing current tilt vs target">
+          <!-- Arc background -->
+          <path d="M30,140 A120,120 0 0,1 270,140" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity="0.1"/>
+
+          <!-- Target zone arcs: ±10° amber, ±3° green -->
+          <path id="tilt-zone-amber" d="" fill="none" stroke="var(--amber)" stroke-width="8" opacity="0.2" stroke-linecap="round"/>
+          <path id="tilt-zone-green" d="" fill="none" stroke="var(--success)" stroke-width="8" opacity="0.3" stroke-linecap="round"/>
+
+          <!-- Graduated arc (0° to 90°) -->
+          <g id="tilt-ticks">
+            <!-- Generated by app.js -->
+          </g>
+
+          <!-- Target tilt marker -->
+          <g id="tilt-target">
+            <circle r="8" fill="var(--amber)" opacity="0.9"/>
+            <circle r="3" fill="white"/>
+          </g>
+
+          <!-- Directional guidance arrow for tilt -->
+          <g id="tilt-guide-arrow" opacity="0">
+            <polygon points="0,-14 -8,0 -4,0 -4,10 4,10 4,0 8,0" fill="var(--amber)" opacity="0.7"/>
+          </g>
+
+          <!-- Current tilt indicator -->
+          <g id="tilt-indicator">
+            <line x1="150" y1="140" x2="150" y2="30" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="150" cy="140" r="6" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.5"/>
+            <circle cx="150" cy="140" r="2.5" fill="var(--amber)"/>
+          </g>
+
+          <!-- Labels -->
+          <text x="28" y="155" font-size="11" fill="var(--ink-light)" text-anchor="middle" font-family="var(--font-sans)">0°</text>
+          <text x="150" y="18" font-size="11" fill="var(--ink-light)" text-anchor="middle" font-family="var(--font-sans)">90°</text>
+          <text x="272" y="155" font-size="11" fill="var(--ink-light)" text-anchor="middle" font-family="var(--font-sans)">0°</text>
+        </svg>
+      </div>
+
+      <!-- Tilt readout -->
+      <div class="tilt__readout">
+        <div class="tilt__current">
+          <span class="tilt__value" id="tilt-value">—</span>
+          <span class="tilt__unit">°</span>
+          <span class="tilt__label-text">tilt</span>
+        </div>
+        <div class="tilt__delta" id="tilt-delta" aria-live="polite">
+          Waiting for tilt sensor…
+        </div>
+      </div>
+    </section>
+
+    <!-- YIELD PANEL ----------------------------------------------------- -->
+    <section class="yield" id="yield-section" hidden>
+      <!-- Circular yield gauge -->
+      <div class="yield__gauge">
+        <svg class="yield__gauge-svg" viewBox="0 0 160 160" aria-label="Yield percentage gauge">
+          <!-- Background track -->
+          <circle cx="80" cy="80" r="68" fill="none" stroke="var(--ink)" stroke-width="8" opacity="0.06"/>
+          <!-- Progress arc (filled by JS) -->
+          <circle id="yield-arc" cx="80" cy="80" r="68" fill="none"
+                  stroke="var(--grey)" stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="427.3" stroke-dashoffset="427.3"
+                  transform="rotate(-90 80 80)"
+                  style="transition: stroke-dashoffset 0.4s ease, stroke 0.4s ease;"/>
+        </svg>
+        <div class="yield__gauge-inner">
+          <span class="yield__pct" id="yield-pct">—</span>
+          <span class="yield__pct-label">of optimal</span>
+        </div>
+      </div>
+
+      <!-- Yield numbers -->
+      <div class="yield__numbers">
+        <div class="yield__row yield__row--current">
+          <span class="yield__label">Current orientation</span>
+          <span class="yield__value" id="yield-current">— kWh/kWp</span>
+        </div>
+        <div class="yield__row yield__row--optimal">
+          <span class="yield__label">Optimal orientation</span>
+          <span class="yield__value" id="yield-optimal">— kWh/kWp</span>
+        </div>
+        <div class="yield__row yield__row--loss">
+          <span class="yield__label">Annual loss</span>
+          <span class="yield__value" id="yield-loss">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATUS BAR ----------------------------------------------------- -->
+    <section class="status" id="status-section" hidden role="status" aria-live="polite">
+      <div class="status__indicator" id="status-indicator">
+        <div class="status__icon" id="status-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <span class="status__text" id="status-text">Aligning…</span>
+      </div>
+      <div class="status__yield" id="status-yield"></div>
+    </section>
+
+    <!-- NO-SENSOR FALLBACK --------------------------------------------- -->
+    <section class="nosensor" id="nosensor-section" hidden>
+      <div class="nosensor__icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="20" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+          <line x1="16" y1="16" x2="32" y2="32" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2 class="nosensor__title">Sensors Not Available</h2>
+      <p class="nosensor__text">
+        Your device doesn't support the compass or tilt sensors needed for live guidance.
+        The optimal orientation for your location is shown above — you can use a physical
+        compass and inclinometer to align your panel.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- INSTRUCTION HINT (bottom)                                           -->
+  <!-- ================================================================== -->
+  <footer class="footer" id="footer">
+    <p class="footer__hint">
+      Place phone flat on panel · Screen facing up
+    </p>
+  </footer>
+
+  <!-- ================================================================== -->
+  <!-- SCRIPTS                                                             -->
+  <!-- ================================================================== -->
+  <script type="module" src="app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.warn('SW registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

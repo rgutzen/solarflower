@@ -95,8 +95,8 @@ LossBudget:
 | Component | URL / Access | Notes |
 |-----------|-------------|-------|
 | Web-App | `http://localhost:8501` (local) | Streamlit; deploy to Streamlit Cloud for public |
-| Notebook | `/home/rgutzen/01_PROJECTS/solarflower-app/notebook/solar_panel_power.ipynb` | Also on GitHub |
-| GitHub | `https://github.com/rgutzen/solarflower-app` | Main repo |
+| Notebook | `/home/rgutzen/01_PROJECTS/solarflower/notebook/solar_panel_power.ipynb` | Also on GitHub |
+| GitHub | `https://github.com/rgutzen/solarflower` | Main repo |
 | Website | `website/index.html` (local); TBD for deployment | Static HTML/CSS/JS |
 | Mobile-App | `mobile-app/index.html` (PWA); same deployment as website | |
 

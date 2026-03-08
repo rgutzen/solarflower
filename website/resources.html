@@ -1,0 +1,788 @@
+<!-- SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Resources — Learn, Install & Maintain PV Systems | Solarflower</title>
+  <meta name="description" content="Curated resources for learning about, installing, and maintaining personal photovoltaic systems — organized by topic and region.">
+  <meta name="author" content="Robin Gutzen">
+  <meta name="theme-color" content="#F5A623">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Solar Resources — Solarflower">
+  <meta property="og:description" content="Curated resources for learning about, installing, and maintaining personal photovoltaic systems.">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ---- Page-specific styles ---- */
+    .resources-hero {
+      padding: calc(64px + var(--sp-12)) 0 var(--sp-16);
+      background: linear-gradient(160deg, var(--bg-warm) 0%, #E8F5E9 50%, #F0D09015 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resources-hero__blob {
+      position: absolute;
+      pointer-events: none;
+    }
+    .resources-hero__blob--1 {
+      width: 400px; height: 400px;
+      top: -100px; left: -100px;
+      opacity: 0.5;
+      animation: blobFloat 25s ease-in-out infinite;
+    }
+    .resources-hero__blob--2 {
+      width: 300px; height: 300px;
+      bottom: -60px; right: -60px;
+      opacity: 0.4;
+      animation: blobFloat 20s ease-in-out infinite reverse;
+    }
+
+    .resources-hero__inner {
+      position: relative;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .resources-hero__breadcrumb {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      margin-bottom: var(--sp-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-2);
+    }
+    .resources-hero__breadcrumb a { color: var(--amber); font-weight: 500; }
+    .resources-hero__breadcrumb a:hover { text-decoration: underline; }
+
+    .resources-hero__title {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: var(--sp-5);
+    }
+
+    .resources-hero__subtitle {
+      font-size: 1.1rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+      margin-bottom: var(--sp-8);
+    }
+
+    .resources-hero__wave {
+      position: absolute;
+      bottom: -1px; left: 0; right: 0; line-height: 0;
+    }
+    .resources-hero__wave svg { width: 100%; height: 60px; }
+
+    /* ---- Resource sections ---- */
+    .resource-section {
+      padding: var(--sp-16) 0;
+    }
+    .resource-section:nth-child(even) {
+      background: var(--grey-light);
+    }
+
+    .resource-section__header {
+      margin-bottom: var(--sp-10);
+    }
+
+    .resource-section__title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: var(--sp-3);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+    }
+
+    .resource-section__title svg {
+      flex-shrink: 0;
+    }
+
+    .resource-section__desc {
+      font-size: 1rem;
+      color: var(--ink-light);
+      max-width: 600px;
+    }
+
+    .resource-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      background: #fff;
+    }
+
+    .resource-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .resource-table thead th {
+      background: var(--ink);
+      color: #fff;
+      padding: var(--sp-3) var(--sp-5);
+      font-weight: 600;
+      text-align: left;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .resource-table tbody tr {
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background var(--duration) var(--ease);
+    }
+
+    .resource-table tbody tr:last-child { border-bottom: none; }
+    .resource-table tbody tr:hover { background: var(--amber-light); }
+
+    .resource-table tbody td {
+      padding: var(--sp-4) var(--sp-5);
+      color: var(--ink);
+      vertical-align: top;
+    }
+
+    .resource-table tbody td:first-child {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .resource-table a {
+      color: var(--blue-dark);
+      font-weight: 500;
+      transition: color var(--duration) var(--ease);
+    }
+
+    .resource-table a:hover {
+      color: var(--amber);
+    }
+
+    .resource-table code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--grey-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .region-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .region-tag--worldwide { background: var(--green-light); color: var(--green-dark); }
+    .region-tag--us { background: var(--blue-light); color: var(--blue-dark); }
+    .region-tag--uk { background: #E8E8E8; color: #1a1a1a; }
+    .region-tag--germany { background: #FFF4E5; color: #8B4513; }
+    .region-tag--australia { background: #E8F5E9; color: #006400; }
+    .region-tag--asia { background: #FFF3E0; color: #E65100; }
+    .region-tag--africa { background: #FFF8E1; color: #FF8F00; }
+    .region-tag--offgrid { background: var(--amber-light); color: var(--amber-dark); }
+
+    /* ---- Quick reference ---- */
+    .quick-ref {
+      padding: var(--sp-16) 0 var(--sp-20);
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+    }
+
+    .quick-ref__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-6);
+      margin-top: var(--sp-10);
+    }
+
+    .quick-ref__card {
+      padding: var(--sp-6);
+      background: #fff;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      border-top: 3px solid var(--amber);
+    }
+
+    .quick-ref__card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: var(--sp-4);
+    }
+
+    .quick-ref__card ul {
+      list-style: none;
+    }
+
+    .quick-ref__card li {
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      padding: var(--sp-2) 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .quick-ref__card li:last-child {
+      border-bottom: none;
+    }
+
+    /* ---- CTA ---- */
+    .resources-cta {
+      padding: var(--sp-16) 0;
+      background: var(--ink);
+      text-align: center;
+    }
+
+    .resources-cta h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: var(--sp-4);
+    }
+
+    .resources-cta p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin: 0 auto var(--sp-8);
+      line-height: 1.7;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 960px) {
+      .quick-ref__grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .quick-ref__grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================== -->
+  <!-- NAVIGATION                                                         -->
+  <!-- ================================================================== -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__brand" aria-label="Solarflower home">
+        <img src="assets/logo.svg" alt="" width="36" height="36" class="nav__logo">
+        <span class="nav__wordmark">Solarflower</span>
+      </a>
+      <ul class="nav__links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#components">Components</a></li>
+        <li><a href="article.html">Article</a></li>
+        <li><a href="https://github.com/rgutzen/solarflower" target="_blank" rel="noopener noreferrer" class="nav__github" aria-label="View on GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================================================================== -->
+  <!-- HERO                                                               -->
+  <!-- ================================================================== -->
+  <header class="resources-hero">
+    <svg class="resources-hero__blob resources-hero__blob--1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M44.7,-76.4C58.8,-69.2,71.8,-58.1,79.6,-44.2C87.4,-30.3,90,-13.6,88.2,2.4C86.4,18.4,80.2,33.6,70.3,45.7C60.4,57.8,46.8,66.7,32.4,73.5C18,80.3,2.8,85,-12.6,83.9C-28,82.8,-43.6,75.9,-56.2,65.3C-68.8,54.7,-78.4,40.4,-83.4,24.5C-88.4,8.6,-88.8,-8.9,-83.5,-24.1C-78.2,-39.3,-67.2,-52.2,-53.7,-59.7C-40.2,-67.2,-24.2,-69.3,-8.4,-73.2C7.4,-77.1,14.8,-82.8,27.4,-82.3C40,-81.8,57.8,-75,44.7,-76.4Z" transform="translate(100 100)" fill="url(#resBlob1)"/>
+      <defs><linearGradient id="resBlob1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5A623" stop-opacity="0.06"/><stop offset="100%" stop-color="#66BB6A" stop-opacity="0.04"/></linearGradient></defs>
+    </svg>
+    <svg class="resources-hero__blob resources-hero__blob--2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M39.9,-65.7C53.4,-60.5,67.1,-52.6,74.2,-40.8C81.3,-29,81.8,-13.3,79.3,1.5C76.8,16.3,71.3,30.1,62.5,41.2C53.7,52.3,41.6,60.7,28.4,66.3C15.2,71.9,0.9,74.7,-13.4,73.3C-27.7,71.9,-42,66.3,-53.2,57C-64.4,47.7,-72.5,34.7,-77,20.2C-81.5,5.7,-82.4,-10.3,-77.4,-24C-72.4,-37.7,-61.5,-49.1,-48.5,-54.6C-35.5,-60.1,-20.5,-59.7,-6.4,-62.2C7.7,-64.7,15.4,-70,26.4,-70.9C37.4,-71.8,51.6,-68.3,39.9,-65.7Z" transform="translate(100 100)" fill="url(#resBlob2)"/>
+      <defs><linearGradient id="resBlob2" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4CAF50" stop-opacity="0.05"/><stop offset="100%" stop-color="#2D7DD2" stop-opacity="0.03"/></linearGradient></defs>
+    </svg>
+
+    <div class="container">
+      <div class="resources-hero__inner">
+        <p class="resources-hero__breadcrumb">
+          <a href="index.html">Solarflower</a>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Resources
+        </p>
+        <h1 class="resources-hero__title">Solar Resources</h1>
+        <p class="resources-hero__subtitle">
+          A curated collection of resources for learning about, installing, and maintaining personal photovoltaic systems. Organized by topic and region.
+        </p>
+      </div>
+    </div>
+
+    <div class="resources-hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,50 C320,75 720,20 1080,50 C1260,65 1380,35 1440,45 L1440,80 L0,80 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- HOW SOLAR WORKS                                                    -->
+  <!-- ================================================================== -->
+  <main>
+    <section class="resource-section" aria-labelledby="fundamentals-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="fundamentals-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            How Solar Works: Fundamentals
+          </h2>
+          <p class="resource-section__desc">These resources explain the basic technology — applicable worldwide. The physics of PV conversion is the same everywhere.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://www.energysage.com/solar/solar-panels-work/" target="_blank" rel="noopener noreferrer">EnergySage: How Do Solar Panels Work?</a></td>
+                <td>Clear explanation of photovoltaic effect, inverters, and system components</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.sunrun.com/go-solar-center/solar-articles/how-does-home-solar-power-work" target="_blank" rel="noopener noreferrer">Sunrun: How Does Solar Power Work?</a></td>
+                <td>Step-by-step visual guide from panels to home electricity</td>
+              </tr>
+              <tr>
+                <td><a href="https://bestcompany.com/blog/solar/how-solar-panels-work" target="_blank" rel="noopener noreferrer">Best Company: How Solar Panels Work</a></td>
+                <td>Beginner-friendly breakdown of PV cells, DC vs AC, and grid interaction</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.energy.gov/eere/solar/homeowners-guide-solar" target="_blank" rel="noopener noreferrer">DOE (US): Homeowner's Guide to Solar</a></td>
+                <td>Official government resource — covers suitability and decision-making</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- INSTALLATION GUIDES                                               -->
+    <!-- ================================================================== -->
+    <section class="resource-section" aria-labelledby="installation-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="installation-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Installation Planning & Guides
+          </h2>
+          <p class="resource-section__desc">Step-by-step installation guides, equipment selection, and DIY resources.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="region-tag region-tag--worldwide">Worldwide</span></td>
+                <td><a href="https://solartechonline.com/blog/diy-solar-panel-system-complete-guide/" target="_blank" rel="noopener noreferrer">SolarTechOnline: DIY Guide</a></td>
+                <td>Can save 50-70% vs professional; equipment lists and cost analysis</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--worldwide">Worldwide</span></td>
+                <td><a href="https://offgridpowerhub.com/off-grid-solar-installation-guide/" target="_blank" rel="noopener noreferrer">OffGridPowerHub: DIY Techniques</a></td>
+                <td>Methods from professional certification schools</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://mysolarfault.com/blogs/complete-guide-solar-panel-installation-beginners" target="_blank" rel="noopener noreferrer">MySolarFault: Installation Guide 2026</a></td>
+                <td>Comprehensive step-by-step from planning to commissioning</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://greengaugehub.com/solar-panel-installation-process-step-by-step-guide/" target="_blank" rel="noopener noreferrer">GreenGauge Hub: Step-by-Step</a></td>
+                <td>From bill analysis to permission to operate</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--uk">UK</span></td>
+                <td><a href="https://energysavingtrust.org.uk/solar-panel-installation/" target="_blank" rel="noopener noreferrer">Energy Saving Trust: Installation Guide</a></td>
+                <td>Official UK trusted guidance</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--uk">UK</span></td>
+                <td><a href="https://solarpanelsfunded.co.uk/solar-panel-installation-in-the-uk/" target="_blank" rel="noopener noreferrer">Solar Panels Funded: UK Guide 2026</a></td>
+                <td>MCS-certified process overview</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--germany">Germany</span></td>
+                <td><a href="https://isolarpro.de/blogs/ratgeber/pv-anlage-2025-in-6-schritten" target="_blank" rel="noopener noreferrer">iSolarpro: PV-Anlage in 6 Schritten</a></td>
+                <td>Step-by-step guide in German</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--australia">Australia</span></td>
+                <td><a href="https://utilitymarket.com.au/the-practical-2025-guide-to-solar-panel-installation-in-australia/" target="_blank" rel="noopener noreferrer">Utility Market: AU Guide 2025</a></td>
+                <td>Complete Australian guide with rebates</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--asia">Asia</span></td>
+                <td><a href="https://www.electronicafinance.com/blog/solar-panel-installation-process-a-step-by-step-guide-2025/" target="_blank" rel="noopener noreferrer">Electronica Finance (India): Guide</a></td>
+                <td>Step-by-step for Indian context</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- OFF-GRID & REMOTE SYSTEMS                                          -->
+    <!-- ================================================================== -->
+    <section class="resource-section" aria-labelledby="offgrid-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="offgrid-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Off-Grid & Remote Systems
+          </h2>
+          <p class="resource-section__desc">Especially relevant for areas without reliable grid access — these resources help you build autonomous solar systems.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://solskenenergy.com/guide-to-off-grid-solar-systems-for-rural-remote-use/" target="_blank" rel="noopener noreferrer">Solsken Energy: Off-Grid Guide</a></td>
+                <td>Comprehensive guide for rural and remote applications</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.solarcurrents.co/off-grid-solar-system-design/" target="_blank" rel="noopener noreferrer">SolarCurrents: Off-Grid Design Guide 2025</a></td>
+                <td>Sizing, component selection, climate planning</td>
+              </tr>
+              <tr>
+                <td><a href="https://solartechonline.com/blog/off-grid-solar-system-complete-guide/" target="_blank" rel="noopener noreferrer">SolarTechOnline: Off-Grid Guide</a></td>
+                <td>Components, sizing, lithium vs lead-acid batteries</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.irena.org/Publications/2023/Nov/Renewable-energy-for-remote-communities-A-guidebook-for-off-grid-projects" target="_blank" rel="noopener noreferrer">IRENA: Off-Grid Projects Guidebook</a></td>
+                <td>International organization guide for off-grid electrification</td>
+              </tr>
+              <tr>
+                <td><a href="https://renewablesenergysources.com/off-grid-renewable-energy-solutions-for-remote-communities-a-complete-practical-guide/" target="_blank" rel="noopener noreferrer">Renewables Energy Sources: Practical Guide</a></td>
+                <td>Practical guide for rural electrification</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- BATTERY STORAGE                                                    -->
+    <!-- ================================================================== -->
+    <section class="resource-section" aria-labelledby="battery-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="battery-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
+            Battery Storage Systems
+          </h2>
+          <p class="resource-section__desc">Resources for adding battery storage to your PV system for backup power and time-of-use savings.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="region-tag region-tag--worldwide">Worldwide</span></td>
+                <td><a href="https://enphase.com/blog/homeowners/essential-guide-home-solar-batteries" target="_blank" rel="noopener noreferrer">Enphase: Home Solar Batteries Guide</a></td>
+                <td>Off-grid vs on-grid, chemistry types</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://greatergrid.com/learn/the-ultimate-guide-to-buying-a-home-solar-battery-system-in-2026" target="_blank" rel="noopener noreferrer">Greater Grid: Home Solar Batteries 2026</a></td>
+                <td>Market trends, purchasing guidance</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://www.solarcurrents.co/solar-battery-buyers-guide/" target="_blank" rel="noopener noreferrer">Solar Currents: Battery Buyer's Guide 2026</a></td>
+                <td>Payback, costs, sizing</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--worldwide">Worldwide</span></td>
+                <td><a href="https://solartechonline.com/blog/solar-battery-backup-system-guide/" target="_blank" rel="noopener noreferrer">SolarTechOnline: Battery Backup Guide 2025</a></td>
+                <td>VPP programs, LiFePO4 chemistry</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- MAINTENANCE & TROUBLESHOOTING                                      -->
+    <!-- ================================================================== -->
+    <section class="resource-section" aria-labelledby="maintenance-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="maintenance-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Maintenance & Troubleshooting
+          </h2>
+          <p class="resource-section__desc">Keep your system running at peak efficiency with proper maintenance.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://8msolar.com/guide-to-solar-panel-maintenance/" target="_blank" rel="noopener noreferrer">8MSolar: Maintenance Guide 2026</a></td>
+                <td>Comprehensive maintenance overview</td>
+              </tr>
+              <tr>
+                <td><a href="https://a1solarstore.com/blog/how-to-clean-solar-panels-properly-complete-guide.html" target="_blank" rel="noopener noreferrer">A1SolarStore: Cleaning Guide 2026</a></td>
+                <td>DIY cleaning, efficiency impact (up to 25% loss from dirt)</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.solarpermitsolutions.com/blog/solar-panel-not-working-causes-and-fixes" target="_blank" rel="noopener noreferrer">Solar Permit Solutions: Troubleshooting 2026</a></td>
+                <td>Testing with multimeter, common issues</td>
+              </tr>
+              <tr>
+                <td><a href="https://diysolarcentral.com/solar-panel-maintenance-guide/" target="_blank" rel="noopener noreferrer">DIY Solar Central: Maintenance Guide</a></td>
+                <td>When and how to clean safely</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- FINANCIAL INCENTIVES                                               -->
+    <!-- ================================================================== -->
+    <section class="resource-section" aria-labelledby="incentives-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="incentives-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Financial Incentives & Economics
+          </h2>
+          <p class="resource-section__desc">Tax credits, rebates, and financing options. These vary significantly by location — always verify current programs in your area.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://www.solarreviews.com/blog/federal-solar-tax-credit" target="_blank" rel="noopener noreferrer">Solar Reviews: Federal Tax Credit 2026</a></td>
+                <td>Latest ITC changes</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://www.solarpermitsolutions.com/blog/solar-incentives-by-state-2026" target="_blank" rel="noopener noreferrer">Solar Permit Solutions: State Incentives</a></td>
+                <td>State-by-state breakdown</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://www.solar.com/learn/solar-rebates-by-state/" target="_blank" rel="noopener noreferrer">Solar.com: Rebates by State</a></td>
+                <td>Interactive finder</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--uk">UK</span></td>
+                <td><a href="https://energysavingtrust.org.uk/solar-panel-installation/" target="_blank" rel="noopener noreferrer">Energy Saving Trust: Finance Options</a></td>
+                <td>Smart Export Guarantee, financing</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--germany">Germany</span></td>
+                <td><a href="https://solar-sed.de/en/photovoltaic-system-in-bavaria/" target="_blank" rel="noopener noreferrer">SED-Solar Bavaria: Funding Programs</a></td>
+                <td>KfW, regional programs</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--australia">Australia</span></td>
+                <td><a href="https://utilitymarket.com.au/the-practical-2025-guide-to-solar-panel-installation-in-australia/" target="_blank" rel="noopener noreferrer">Utility Market: Rebates & Incentives</a></td>
+                <td>Australian rebates</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--worldwide">Developing</span></td>
+                <td><a href="https://ember-energy.org/latest-insights/the-first-evidence-of-a-take-off-in-solar-in-africa/" target="_blank" rel="noopener noreferrer">Ember Energy: Solar in Africa</a></td>
+                <td>Africa's solar growth data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- PERMITS & REGULATIONS                                              -->
+    <!-- ================================================================== -->
+    <section class="resource-section" aria-labelledby="permits-heading">
+      <div class="container">
+        <div class="resource-section__header">
+          <h2 class="resource-section__title" id="permits-heading">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--dusk)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Permits, Regulations & Codes
+          </h2>
+          <p class="resource-section__desc">Building permits, electrical codes, and regulatory requirements vary by jurisdiction.</p>
+        </div>
+
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Resource</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://solsmart.org/resource/solar-pv-construction-codes-permitting-inspection" target="_blank" rel="noopener noreferrer">SolSmart: Codes & Permitting</a></td>
+                <td>US permitting overview</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--us">USA</span></td>
+                <td><a href="https://www.solarenergyworld.com/blog/solar-technology-installation/solar-installation-permits-guide/" target="_blank" rel="noopener noreferrer">Solar Energy World: Permits Guide</a></td>
+                <td>Permit requirements</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--uk">UK</span></td>
+                <td><a href="https://solarpanelsfunded.co.uk/solar-panel-installation-in-the-uk/" target="_blank" rel="noopener noreferrer">Solar Panels Funded: MCS Certification</a></td>
+                <td>MCS-certified installer requirements</td>
+              </tr>
+              <tr>
+                <td><span class="region-tag region-tag--germany">Germany</span></td>
+                <td><a href="https://jyhsolargroup.com/plug-and-play-solar-registration-germany-2025/" target="_blank" rel="noopener noreferrer">JYH Solar: Registration Germany</a></td>
+                <td>Balcony solar registration (Bundesnetzagentur)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- QUICK REFERENCE                                                    -->
+    <!-- ================================================================== -->
+    <section class="quick-ref" aria-labelledby="quickref-heading">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title" id="quickref-heading">Key Takeaways</h2>
+          <p class="section-lead">Quick facts to keep in mind when planning your solar journey.</p>
+        </div>
+
+        <div class="quick-ref__grid">
+          <div class="quick-ref__card">
+            <h3>Maintenance</h3>
+            <ul>
+              <li>Minimal upkeep required — mainly cleaning</li>
+              <li>Dust/debris can reduce output by 20-25%</li>
+              <li>Rain can help wash panels naturally</li>
+              <li>Annual professional inspection recommended</li>
+            </ul>
+          </div>
+
+          <div class="quick-ref__card">
+            <h3>Financial</h3>
+            <ul>
+              <li>Federal incentives vary widely by region</li>
+              <li>Check local utility rebate programs</li>
+              <li>Net metering policies differ by provider</li>
+              <li>Payback typically 5-15 years</li>
+            </ul>
+          </div>
+
+          <div class="quick-ref__card">
+            <h3>Technical</h3>
+            <ul>
+              <li>Panels last 25-30 years</li>
+              <li>Degradation: 0.5-0.8% per year</li>
+              <li>Optimal tilt ≈ latitude × 0.9 + 3°</li>
+              <li>South-facing (NH) / North-facing (SH)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- CTA BANNER                                                         -->
+    <!-- ================================================================== -->
+    <section class="resources-cta" aria-labelledby="cta-heading">
+      <div class="container">
+        <h2 id="cta-heading">Ready to plan your system?</h2>
+        <p>Use Solarflower's Solar Advisor to simulate yield and find the optimal orientation for your specific location.</p>
+        <a href="solar-advisor.html" class="btn btn--primary">
+          Open Solar Advisor
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                             -->
+  <!-- ================================================================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
+        <span>Solarflower</span>
+      </div>
+      <p class="footer__copy">&copy; 2025 Robin Gutzen &middot; <a href="https://github.com/rgutzen/solarflower/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0-or-later</a></p>
+      <div class="footer__links">
+        <a href="https://github.com/rgutzen/solarflower" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="mailto:robin.gutzen@outlook.com" aria-label="Email Robin Gutzen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+</body>
+</html>

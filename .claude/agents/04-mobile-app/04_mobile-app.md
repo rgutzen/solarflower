@@ -29,7 +29,7 @@ The Solarflower project has four components. You work on component 4:
 3. **Website** (`website/`) — landing page
 4. **Mobile-App** (`mobile-app/`) — YOUR COMPONENT
 
-**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower-app/`
+**Repository root:** `/home/rgutzen/01_PROJECTS/solarflower/`
 **License:** AGPL-3.0-or-later
 **Copyright:** Robin Gutzen — robin.gutzen@outlook.com
 

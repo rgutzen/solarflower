@@ -8,7 +8,7 @@ Build a production web app in `solar-app/` alongside the educational notebook. T
 ## Architecture
 
 ```
-solarflower-app/
+solarflower/
 ├── solar_panel_power.ipynb    (unchanged)
 └── solar-app/
     ├── app.py                 (Streamlit entry point)

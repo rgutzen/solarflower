@@ -170,10 +170,9 @@ Add more decorative organic elements - leaves, vines, seeds.
 ```
 
 **Implementation Steps:**
-1. [ ] Add vine illustration to hero background
-2. [ ] Add floating seed/pollen particles
-3. [ ] Create more dynamic blob shapes
-4. [ ] Add organic corner decorations
+1. [ ] Add floating seed/pollen particles
+2. [ ] Create more dynamic blob shapes
+3. [ ] Add organic corner decorations
 
 ### A.5 Improve Cards with Decorative Elements
 
