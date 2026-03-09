@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 [theme]
-primaryColor     = "#F5A623"
-backgroundColor  = "#0e1117"
-secondaryBackgroundColor = "#1e1e2e"
-textColor        = "#fafafa"
-font             = "sans serif"
+primaryColor              = "#E8920E"
+backgroundColor           = "#F8FAF5"
+secondaryBackgroundColor  = "#FEFDF5"
+textColor                 = "#2D3B2D"
+font                      = "sans serif"
 
 [server]
 # Allow embedding in iframes (needed for the website embed)

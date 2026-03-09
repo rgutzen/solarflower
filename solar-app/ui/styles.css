@@ -34,18 +34,26 @@
    App background & global text
    ------------------------------------------------------------------ */
 [data-testid="stApp"] {
-  background-color: #F8FAF5;
+  background-color: var(--sf-off-white);
 }
 
-/* Ensure all body text is dark enough to read on light backgrounds */
+/* Global text colours on the warm-white background */
 [data-testid="stApp"] p,
 [data-testid="stApp"] span,
-[data-testid="stApp"] li,
-[data-testid="stApp"] label {
+[data-testid="stApp"] li {
   color: var(--sf-ink-light);
 }
 
-h1, h2, h3, h4 {
+/* Main app title */
+[data-testid="stApp"] h1 {
+  font-family: 'Georgia', 'Lora', serif !important;
+  color: var(--sf-ink) !important;
+  font-size: 1.9rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+}
+
+h2, h3, h4 {
   color: var(--sf-ink) !important;
   font-family: 'Georgia', serif;
 }
@@ -54,6 +62,8 @@ h1, h2, h3, h4 {
 [data-testid="stCaptionContainer"] p,
 .stCaption {
   color: var(--sf-grey) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
 }
 
 /* ------------------------------------------------------------------
@@ -61,7 +71,7 @@ h1, h2, h3, h4 {
    ------------------------------------------------------------------ */
 section[data-testid="stSidebar"] {
   background-color: var(--sf-warm-white);
-  border-right: 1px solid var(--sf-border);
+  border-right: 2px solid var(--sf-border);
 }
 
 section[data-testid="stSidebar"] h1,
@@ -70,49 +80,74 @@ section[data-testid="stSidebar"] h3 {
   color: var(--sf-ink) !important;
 }
 
+/* Sidebar section expandable headers */
+section[data-testid="stSidebar"] [data-testid="stExpander"] {
+  background-color: var(--sf-earth-pale) !important;
+  border: 1px solid var(--sf-border) !important;
+  border-radius: 10px 14px 10px 14px !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+  color: var(--sf-ink) !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+}
+
 /* ------------------------------------------------------------------
-   Metric cards — MUST be visually distinct from the page background
+   Metric cards — compact for 7-column layout
    ------------------------------------------------------------------ */
 [data-testid="stMetric"] {
-  background: linear-gradient(135deg, #F3F8F2 0%, var(--sf-warm-white) 100%) !important;
+  background: linear-gradient(145deg, #EEF6EE 0%, var(--sf-warm-white) 100%) !important;
   border: 1px solid var(--sf-border) !important;
   border-radius: 12px 16px 14px 11px / 11px 14px 16px 12px !important;
-  box-shadow: 0 2px 10px var(--sf-shadow) !important;
-  padding: 14px 18px !important;
+  box-shadow: 0 2px 8px var(--sf-shadow) !important;
+  padding: 10px 12px !important;
+  min-width: 0;
 }
 
-/* Metric label */
+/* Prevent metric label from being clipped */
+[data-testid="stMetricLabel"],
 [data-testid="stMetricLabel"] > div,
 [data-testid="stMetricLabel"] p {
-  color: var(--sf-ink-light) !important;
-  font-size: 0.82rem !important;
-  font-weight: 500 !important;
+  color: var(--sf-grey) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.3 !important;
 }
 
-/* Metric value */
+/* Prevent metric value from being truncated with "..." */
+[data-testid="stMetricValue"],
 [data-testid="stMetricValue"] > div {
   color: var(--sf-ink) !important;
-  font-size: 1.45rem !important;
+  font-size: 1.15rem !important;
   font-weight: 700 !important;
   font-family: 'Georgia', serif;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.2 !important;
 }
 
 /* Metric delta */
 [data-testid="stMetricDelta"] {
   color: var(--sf-earth) !important;
-  font-size: 0.8rem !important;
+  font-size: 0.78rem !important;
 }
 
-/* Breathing hover */
+/* Subtle amber glow on hover */
 @keyframes breathe-gentle {
-  0%, 100% { box-shadow: 0 2px 10px var(--sf-shadow); }
-  50%       { box-shadow: 0 4px 18px rgba(232, 146, 14, 0.14); }
+  0%, 100% { box-shadow: 0 2px 8px var(--sf-shadow); }
+  50%       { box-shadow: 0 4px 16px rgba(232, 146, 14, 0.18); }
 }
 
 [data-testid="stMetric"]:hover {
   animation: breathe-gentle 3s ease-in-out infinite;
+  border-color: rgba(232, 146, 14, 0.3) !important;
 }
 
 /* ------------------------------------------------------------------
@@ -126,28 +161,31 @@ section[data-testid="stSidebar"] h3 {
   font-weight: 600 !important;
   font-size: 0.92rem !important;
   transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease !important;
-  box-shadow: 0 4px 14px rgba(232, 146, 14, 0.22),
+  box-shadow: 0 4px 14px rgba(232, 146, 14, 0.25),
               inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
 }
 
 .stButton > button[kind="primary"]:hover {
   background-color: #B86B00 !important;
   color: #FFFFFF !important;
-  box-shadow: 0 6px 22px rgba(232, 146, 14, 0.38) !important;
+  box-shadow: 0 6px 22px rgba(232, 146, 14, 0.40) !important;
   transform: translateY(-1px) !important;
 }
 
-/* Secondary button */
-.stButton > button[kind="secondary"] {
+/* Secondary / tertiary buttons */
+.stButton > button[kind="secondary"],
+.stButton > button[kind="tertiary"] {
   background-color: transparent !important;
   color: var(--sf-earth) !important;
   border: 1.5px solid var(--sf-border) !important;
   border-radius: 20px 4px 20px 4px !important;
 }
 
-.stButton > button[kind="secondary"]:hover {
+.stButton > button[kind="secondary"]:hover,
+.stButton > button[kind="tertiary"]:hover {
   background-color: var(--sf-earth-pale) !important;
   border-color: var(--sf-earth) !important;
+  color: var(--sf-ink) !important;
 }
 
 /* ------------------------------------------------------------------
@@ -157,13 +195,14 @@ button[data-baseweb="tab"] {
   color: var(--sf-ink-light) !important;
   border-radius: 10px 10px 0 0 !important;
   font-size: 0.9rem !important;
+  font-weight: 500 !important;
 }
 
 button[data-baseweb="tab"][aria-selected="true"] {
   background-color: var(--sf-amber-pale) !important;
   color: var(--sf-ink) !important;
   border-bottom: 3px solid var(--sf-amber) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 button[data-baseweb="tab"]:hover {
@@ -172,17 +211,18 @@ button[data-baseweb="tab"]:hover {
 }
 
 /* ------------------------------------------------------------------
-   Expanders
+   Expanders (main content)
    ------------------------------------------------------------------ */
 [data-testid="stExpander"] {
   border: 1px solid var(--sf-border) !important;
-  border-radius: 10px !important;
+  border-radius: 12px 16px 12px 16px !important;
   background-color: var(--sf-warm-white) !important;
 }
 
 [data-testid="stExpander"] summary {
   color: var(--sf-ink) !important;
   font-weight: 600 !important;
+  font-size: 0.95rem !important;
 }
 
 [data-testid="stExpander"] summary:hover {
@@ -195,11 +235,14 @@ button[data-baseweb="tab"]:hover {
 input:focus, select:focus, textarea:focus {
   border-color: var(--sf-amber) !important;
   box-shadow: 0 0 0 3px rgba(232, 146, 14, 0.15) !important;
+  outline: none !important;
 }
 
 /* Slider thumb */
 div[data-testid="stSlider"] [role="slider"] {
   background-color: var(--sf-amber) !important;
+  border: 2px solid var(--sf-warm-white) !important;
+  box-shadow: 0 2px 6px rgba(232, 146, 14, 0.35) !important;
 }
 
 /* Slider track */
@@ -220,17 +263,22 @@ div[data-testid="stSlider"] > div > div > div > div {
 /* Selectbox / dropdown */
 [data-testid="stSelectbox"] label {
   color: var(--sf-ink) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
 }
 
 /* Number inputs */
 [data-testid="stNumberInput"] label {
   color: var(--sf-ink) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
 }
 
 /* Text inputs */
 [data-testid="stTextInput"] label {
   color: var(--sf-ink) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
 }
 
 /* Checkbox */
@@ -242,8 +290,10 @@ div[data-testid="stSlider"] > div > div > div > div {
    Charts container
    ------------------------------------------------------------------ */
 [data-testid="stPlotlyChart"] {
-  border-radius: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--sf-border);
   overflow: hidden;
+  background-color: var(--sf-warm-white);
 }
 
 /* ------------------------------------------------------------------
@@ -252,19 +302,14 @@ div[data-testid="stSlider"] > div > div > div > div {
 [data-testid="stDataFrame"] {
   border: 1px solid var(--sf-border) !important;
   border-radius: 10px !important;
-  background-color: var(--sf-warm-white) !important;
+  overflow: hidden !important;
 }
 
 /* ------------------------------------------------------------------
-   Alerts / info boxes
+   Info / alert boxes
    ------------------------------------------------------------------ */
 [data-testid="stAlert"] {
-  border-radius: 10px !important;
-}
-
-/* Info box */
-.stAlert[data-baseweb="notification"] {
-  border-radius: 10px !important;
+  border-radius: 12px 16px 12px 16px !important;
 }
 
 /* ------------------------------------------------------------------
@@ -277,11 +322,18 @@ div[data-testid="stSlider"] > div > div > div > div {
   font-weight: 500 !important;
 }
 
+[data-testid="stDownloadButton"] > button:hover {
+  background-color: var(--sf-earth-pale) !important;
+  border-color: var(--sf-earth) !important;
+}
+
 /* ------------------------------------------------------------------
-   Sidebar dividers
+   Dividers
    ------------------------------------------------------------------ */
 hr {
-  border-color: var(--sf-border) !important;
+  border: none !important;
+  border-top: 1px solid var(--sf-border) !important;
+  margin: 0.5rem 0 !important;
 }
 
 /* ------------------------------------------------------------------
@@ -298,11 +350,14 @@ hr {
 /* ------------------------------------------------------------------
    Responsive
    ------------------------------------------------------------------ */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   [data-testid="stMetric"] {
-    padding: 10px 12px !important;
+    padding: 8px 10px !important;
   }
   [data-testid="stMetricValue"] > div {
-    font-size: 1.2rem !important;
+    font-size: 1.0rem !important;
+  }
+  [data-testid="stMetricLabel"] p {
+    font-size: 0.65rem !important;
   }
 }
