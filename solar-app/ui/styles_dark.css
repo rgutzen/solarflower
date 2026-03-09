@@ -1,0 +1,382 @@
+/* SPDX-FileCopyrightText: 2025 Robin Gutzen <robin.gutzen@outlook.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* ===================================================================
+   Solarflower — Dark Mode Overrides
+   Forest-night solarpunk theme: warm dark greens, glowing amber accents
+   =================================================================== */
+
+/* ------------------------------------------------------------------
+   Design tokens — dark palette
+   ------------------------------------------------------------------ */
+:root {
+  --sf-amber:        #F5A623;
+  --sf-amber-mid:    #FFBA4C;
+  --sf-amber-light:  #3A2D10;
+  --sf-amber-pale:   #252018;
+  --sf-earth:        #6BAF82;
+  --sf-earth-light:  #1A2E22;
+  --sf-earth-pale:   #162518;
+  --sf-terracotta:   #E88060;
+  --sf-blue:         #6BA3D6;
+  --sf-clay:         #C8A080;
+  --sf-sage:         #A0D4A0;
+  --sf-ink:          #E0E8E2;
+  --sf-ink-light:    #A8BBAD;
+  --sf-grey:         #7B9485;
+  --sf-warm-white:   #1A2220;
+  --sf-off-white:    #141B18;
+  --sf-border:       rgba(143, 189, 143, 0.18);
+  --sf-shadow:       rgba(0, 0, 0, 0.40);
+}
+
+/* ------------------------------------------------------------------
+   App background
+   ------------------------------------------------------------------ */
+[data-testid="stApp"] {
+  background-color: #141B18 !important;
+}
+
+/* ------------------------------------------------------------------
+   Global text
+   ------------------------------------------------------------------ */
+[data-testid="stApp"] p,
+[data-testid="stApp"] span,
+[data-testid="stApp"] li {
+  color: #A8BBAD !important;
+}
+
+[data-testid="stApp"] h1 {
+  color: #E0E8E2 !important;
+}
+
+h2, h3, h4 {
+  color: #E0E8E2 !important;
+}
+
+[data-testid="stCaptionContainer"] p,
+.stCaption {
+  color: #7B9485 !important;
+}
+
+/* ------------------------------------------------------------------
+   Sidebar
+   ------------------------------------------------------------------ */
+section[data-testid="stSidebar"] {
+  background-color: #1A2220 !important;
+  border-right-color: rgba(143, 189, 143, 0.18) !important;
+}
+
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+  color: #E0E8E2 !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stExpander"] {
+  background-color: #1E2C25 !important;
+  border-color: rgba(143, 189, 143, 0.18) !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+  color: #E0E8E2 !important;
+}
+
+/* Sidebar labels, text inputs, etc. */
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label {
+  color: #A8BBAD !important;
+}
+
+/* Sidebar info boxes */
+section[data-testid="stSidebar"] [data-testid="stAlert"] {
+  background-color: #1E2C25 !important;
+  color: #A8BBAD !important;
+}
+
+/* ------------------------------------------------------------------
+   Metric cards — dark forest style
+   ------------------------------------------------------------------ */
+[data-testid="stMetric"] {
+  background: linear-gradient(145deg, #1E2C25 0%, #1A2220 100%) !important;
+  border-color: rgba(143, 189, 143, 0.18) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] > div,
+[data-testid="stMetricLabel"] p {
+  color: #7B9485 !important;
+}
+
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] > div {
+  color: #E0E8E2 !important;
+}
+
+[data-testid="stMetricDelta"] {
+  color: #6BAF82 !important;
+}
+
+@keyframes breathe-gentle-dark {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); }
+  50%       { box-shadow: 0 4px 16px rgba(245, 166, 35, 0.22); }
+}
+
+[data-testid="stMetric"]:hover {
+  animation: breathe-gentle-dark 3s ease-in-out infinite !important;
+  border-color: rgba(245, 166, 35, 0.35) !important;
+}
+
+/* ------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------ */
+.stButton > button[kind="primary"] {
+  background-color: #D48010 !important;
+  color: #141B18 !important;
+  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.30),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.stButton > button[kind="primary"]:hover {
+  background-color: #F5A623 !important;
+  color: #141B18 !important;
+  box-shadow: 0 6px 22px rgba(245, 166, 35, 0.45) !important;
+}
+
+.stButton > button[kind="secondary"],
+.stButton > button[kind="tertiary"] {
+  background-color: transparent !important;
+  color: #6BAF82 !important;
+  border-color: rgba(143, 189, 143, 0.25) !important;
+}
+
+.stButton > button[kind="secondary"]:hover,
+.stButton > button[kind="tertiary"]:hover {
+  background-color: #1E2C25 !important;
+  border-color: #6BAF82 !important;
+  color: #E0E8E2 !important;
+}
+
+/* ------------------------------------------------------------------
+   Tabs
+   ------------------------------------------------------------------ */
+button[data-baseweb="tab"] {
+  color: #A8BBAD !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+  background-color: #252018 !important;
+  color: #F5A623 !important;
+  border-bottom-color: #F5A623 !important;
+}
+
+button[data-baseweb="tab"]:hover {
+  background-color: #1E2C25 !important;
+  color: #E0E8E2 !important;
+}
+
+/* Tab list line */
+div[role="tablist"] {
+  border-bottom-color: rgba(143, 189, 143, 0.12) !important;
+}
+
+/* ------------------------------------------------------------------
+   Expanders (main content)
+   ------------------------------------------------------------------ */
+[data-testid="stExpander"] {
+  border-color: rgba(143, 189, 143, 0.18) !important;
+  background-color: #1A2220 !important;
+}
+
+[data-testid="stExpander"] summary {
+  color: #E0E8E2 !important;
+}
+
+[data-testid="stExpander"] summary:hover {
+  color: #F5A623 !important;
+}
+
+[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
+  background-color: #1A2220 !important;
+}
+
+/* ------------------------------------------------------------------
+   Form controls
+   ------------------------------------------------------------------ */
+input, select, textarea {
+  background-color: #1E2C25 !important;
+  color: #E0E8E2 !important;
+  border-color: rgba(143, 189, 143, 0.22) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #F5A623 !important;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.20) !important;
+}
+
+/* Slider thumb */
+div[data-testid="stSlider"] [role="slider"] {
+  background-color: #F5A623 !important;
+  border-color: #1A2220 !important;
+  box-shadow: 0 2px 8px rgba(245, 166, 35, 0.40) !important;
+}
+
+/* Slider track */
+div[data-testid="stSlider"] > div > div > div > div {
+  background-color: #D48010 !important;
+}
+
+/* Slider label text */
+div[data-testid="stSlider"] label {
+  color: #E0E8E2 !important;
+}
+
+div[data-testid="stSlider"] [data-testid="stTickBarMin"],
+div[data-testid="stSlider"] [data-testid="stTickBarMax"] {
+  color: #7B9485 !important;
+}
+
+/* Radio buttons */
+[data-testid="stRadio"] label {
+  color: #A8BBAD !important;
+}
+
+/* Selectbox / dropdown */
+[data-testid="stSelectbox"] label {
+  color: #E0E8E2 !important;
+}
+
+[data-testid="stSelectbox"] div[data-baseweb="select"] {
+  background-color: #1E2C25 !important;
+}
+
+[data-testid="stSelectbox"] div[data-baseweb="select"] span {
+  color: #E0E8E2 !important;
+}
+
+/* Number & text inputs */
+[data-testid="stNumberInput"] label {
+  color: #E0E8E2 !important;
+}
+
+[data-testid="stTextInput"] label {
+  color: #E0E8E2 !important;
+}
+
+/* Checkbox */
+[data-testid="stCheckbox"] label {
+  color: #A8BBAD !important;
+}
+
+/* Toggle */
+[data-testid="stToggle"] label {
+  color: #A8BBAD !important;
+}
+
+/* ------------------------------------------------------------------
+   Charts container
+   ------------------------------------------------------------------ */
+[data-testid="stPlotlyChart"] {
+  border-color: rgba(143, 189, 143, 0.15) !important;
+  background-color: #1A2220 !important;
+}
+
+/* ------------------------------------------------------------------
+   DataFrame / table
+   ------------------------------------------------------------------ */
+[data-testid="stDataFrame"] {
+  border-color: rgba(143, 189, 143, 0.18) !important;
+}
+
+/* Style the embedded iframe for dataframes */
+[data-testid="stDataFrame"] iframe {
+  background-color: #1A2220 !important;
+}
+
+/* ------------------------------------------------------------------
+   Alert / info boxes
+   ------------------------------------------------------------------ */
+[data-testid="stAlert"] {
+  background-color: #1E2C25 !important;
+  color: #A8BBAD !important;
+}
+
+/* ------------------------------------------------------------------
+   Download buttons
+   ------------------------------------------------------------------ */
+[data-testid="stDownloadButton"] > button {
+  border-color: rgba(143, 189, 143, 0.25) !important;
+  color: #6BAF82 !important;
+  background-color: transparent !important;
+}
+
+[data-testid="stDownloadButton"] > button:hover {
+  background-color: #1E2C25 !important;
+  border-color: #6BAF82 !important;
+}
+
+/* ------------------------------------------------------------------
+   Dividers
+   ------------------------------------------------------------------ */
+hr {
+  border-top-color: rgba(143, 189, 143, 0.15) !important;
+}
+
+/* ------------------------------------------------------------------
+   Spinner / loading
+   ------------------------------------------------------------------ */
+[data-testid="stSpinner"] p {
+  color: #A8BBAD !important;
+}
+
+/* ------------------------------------------------------------------
+   Streamlit header / decoration bar
+   ------------------------------------------------------------------ */
+[data-testid="stHeader"] {
+  background-color: rgba(20, 27, 24, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+[data-testid="stDecoration"] {
+  background-color: #1A2220 !important;
+}
+
+/* ------------------------------------------------------------------
+   Popover / dropdown menus
+   ------------------------------------------------------------------ */
+[data-baseweb="popover"] {
+  background-color: #1E2C25 !important;
+  border-color: rgba(143, 189, 143, 0.18) !important;
+}
+
+[data-baseweb="popover"] li {
+  color: #E0E8E2 !important;
+}
+
+[data-baseweb="popover"] li:hover {
+  background-color: #253530 !important;
+}
+
+/* ------------------------------------------------------------------
+   Tooltip
+   ------------------------------------------------------------------ */
+[data-testid="stTooltipContent"] {
+  background-color: #1E2C25 !important;
+  color: #A8BBAD !important;
+  border-color: rgba(143, 189, 143, 0.18) !important;
+}
+
+/* ------------------------------------------------------------------
+   Success / error message overrides
+   ------------------------------------------------------------------ */
+[data-testid="stSuccess"] {
+  background-color: rgba(107, 175, 130, 0.12) !important;
+  color: #6BAF82 !important;
+}
+
+[data-testid="stError"] {
+  background-color: rgba(232, 128, 96, 0.12) !important;
+  color: #E88060 !important;
+}
